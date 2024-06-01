@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Student Portal</title>
+		<!-- CSS FILES -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css"
+		/>
+		<link rel="stylesheet" type="text/css" href="css/dashboard.css" />
+	</head>
+	<body>
+		<!--HEADER-->
+		<header id="top-head" class="uk-position-fixed">
+			<div class="uk-container uk-container-expand uk-background-primary">
+				<nav
+					class="uk-navbar uk-light"
+					data-uk-navbar="mode:click; duration: 250"
+				>
+					<div class="uk-navbar-left">
+						<div class="uk-navbar-item uk-hidden@m">
+							<a class="uk-logo" href="#"
+								><img
+									class="custom-logo"
+									src="img/dashboard-logo-white.svg"
+									alt=""
+							/></a>
+						</div>
+						<ul class="uk-navbar-nav uk-visible@m">
+							<li><a href="#">Accounts</a></li>
+							<li>
+								<a href="#"
+									>Settings <span data-uk-icon="icon: triangle-down"></span
+								></a>
+								<div class="uk-navbar-dropdown">
+									<ul class="uk-nav uk-navbar-dropdown-nav">
+										<li class="uk-nav-header">YOUR ACCOUNT</li>
+										<li>
+											<a href="#"
+												><span data-uk-icon="icon: info"></span> Summary</a
+											>
+										</li>
+										<li>
+											<a href="#"
+												><span data-uk-icon="icon: refresh"></span> Edit</a
+											>
+										</li>
+										<li>
+											<a href="#"
+												><span data-uk-icon="icon: settings"></span>
+												Configuration</a
+											>
+										</li>
+										<li class="uk-nav-divider"></li>
+										<li>
+											<a href="#"
+												><span data-uk-icon="icon: image"></span> Your Data</a
+											>
+										</li>
+										<li class="uk-nav-divider"></li>
+										<li>
+											<a href="/logout"
+												><span data-uk-icon="icon: sign-out"></span> Logout</a
+											>
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+						<div class="uk-navbar-item uk-visible@s">
+							<form action="dashboard.html" class="uk-search uk-search-default">
+								<span data-uk-search-icon></span>
+								<input
+									class="uk-search-input search-field"
+									type="search"
+									placeholder="Search"
+								/>
+							</form>
+						</div>
+					</div>
+					<div class="uk-navbar-right">
+						<ul class="uk-navbar-nav">
+							<li>
+								<a
+									href="#"
+									data-uk-icon="icon:user"
+									title="Your profile"
+									data-uk-tooltip
+								></a>
+							</li>
+							<li>
+								<a href="#"
+									><span
+										data-uk-icon="icon: comments"
+										class="uk-margin-small-right"
+									></span
+								></a>
+							</li>
+							<li>
+								<a
+									href="/logout"
+									data-uk-icon="icon:  sign-out"
+									title="Sign Out"
+									data-uk-tooltip
+								></a>
+							</li>
+							<li>
+								<a
+									class="uk-navbar-toggle"
+									data-uk-toggle
+									data-uk-navbar-toggle-icon
+									href="#offcanvas-nav"
+									title="Offcanvas"
+									data-uk-tooltip
+								></a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</header>
+		<!--/HEADER-->
+		<!-- LEFT BAR -->
+		<aside id="left-col" class="uk-light uk-visible@m">
+			<div class="left-logo uk-flex uk-flex-middle">
+				<div><h2 class="uk-nav-header">School Logo</h2></div>
+				<!-- <img class="custom-logo" src="img/dashboard-logo.svg" alt="" /> -->
+			</div>
+			<div class="left-content-box content-box-dark">
+				<img src="img/avatar.svg" alt="" class="uk-border-circle profile-img" />
+				<h4 class="uk-text-center uk-margin-remove-vertical text-light">
+					Elvis Kemoi
+				</h4>
+
+				<div class="uk-position-relative uk-text-center uk-display-block">
+					<a
+						href="#"
+						class="uk-text-small uk-text-muted uk-display-block uk-text-center"
+						data-uk-icon="icon: triangle-down; ratio: 0.7"
+						>Student</a
+					>
+					<!-- user dropdown -->
+					<div
+						class="uk-dropdown user-drop"
+						data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150"
+					>
+						<ul class="uk-nav uk-dropdown-nav uk-text-left">
+							<li>
+								<a href="#"><span data-uk-icon="icon: info"></span> Summary</a>
+							</li>
+							<li>
+								<a href="#"><span data-uk-icon="icon: refresh"></span> Edit</a>
+							</li>
+							<li>
+								<a href="#"
+									><span data-uk-icon="icon: settings"></span> Configuration</a
+								>
+							</li>
+							<li class="uk-nav-divider"></li>
+							<li>
+								<a href="#"
+									><span data-uk-icon="icon: image"></span> Your Data</a
+								>
+							</li>
+							<li class="uk-nav-divider"></li>
+							<li>
+								<a href="/logout"
+									><span data-uk-icon="icon: sign-out"></span> Sign Out</a
+								>
+							</li>
+						</ul>
+					</div>
+					<!-- /user dropdown -->
+				</div>
+			</div>
+
+			<div class="left-nav-wrap">
+				<ul class="uk-nav uk-nav-default uk-nav-parent-icon" data-uk-nav>
+					<li class="uk-nav-header">ACTIONS</li>
+
+					<li>
+						<a href="#UpcomingEvents"
+							><span
+								data-uk-icon="icon: thumbnails"
+								class="uk-margin-small-right"
+							></span
+							>Upcoming Events</a
+						>
+					</li>
+					<li>
+						<a href="#"
+							><span
+								data-uk-icon="icon: users"
+								class="uk-margin-small-right"
+							></span
+							>Exam Results</a
+						>
+					</li>
+					<!-- <li class="uk-parent">
+						<a href="#"
+							><span
+								data-uk-icon="icon: users"
+								class="uk-margin-small-right"
+							></span
+							>Students</a
+						>
+						<ul class="uk-nav-sub">
+							<li>
+								<a title="Article" href="article.html">Article</a>
+							</li>
+							<li>
+								<a title="Album" href="album.html">Album</a>
+							</li>
+							<li>
+								<a title="Cover" href="cover.html">Cover</a>
+							</li>
+							<li>
+								<a title="Cards" href="cards.html">Cards</a>
+							</li>
+							<li>
+								<a title="News Blog" href="newsBlog.html">News Blog</a>
+							</li>
+							<li>
+								<a title="Price" href="price.html">Price</a>
+							</li>
+							<li>
+								<a title="Login" href="login.html">Login</a>
+							</li>
+							<li>
+								<a title="Login-Dark" href="login-dark.html">Login - Dark</a>
+							</li>
+						</ul>
+					</li> -->
+					<li class="uk-parent">
+						<a href="#"
+							><span
+								data-uk-icon="icon: thumbnails"
+								class="uk-margin-small-right"
+							></span
+							>Edit</a
+						>
+						<ul class="uk-nav-sub">
+							<li>
+								<a title="Article" href="article.html">Article</a>
+							</li>
+							<li>
+								<a title="Album" href="album.html">Album</a>
+							</li>
+							<li>
+								<a title="Cover" href="cover.html">Cover</a>
+							</li>
+							<li>
+								<a title="Cards" href="cards.html">Cards</a>
+							</li>
+							<li>
+								<a title="News Blog" href="newsBlog.html">News Blog</a>
+							</li>
+							<li>
+								<a title="Price" href="price.html">Price</a>
+							</li>
+							<li>
+								<a title="Login" href="login.html">Login</a>
+							</li>
+							<li>
+								<a title="Login-Dark" href="login-dark.html">Login - Dark</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"
+							><span
+								data-uk-icon="icon: album"
+								class="uk-margin-small-right"
+							></span
+							>Assignments</a
+						>
+					</li>
+					<li>
+						<a href="#"
+							><span
+								data-uk-icon="icon: lifesaver"
+								class="uk-margin-small-right"
+							></span
+							>Tips</a
+						>
+					</li>
+					<li>
+						<a href="#"
+							><span
+								data-uk-icon="icon: comments"
+								class="uk-margin-small-right"
+							></span
+							>Messages</a
+						>
+					</li>
+					<li class="uk-parent">
+						<a href="#"
+							><span
+								data-uk-icon="icon: comments"
+								class="uk-margin-small-right"
+							></span
+							>Fees Payment</a
+						>
+						<ul class="uk-nav-sub">
+							<li><a href="#">Download Receipt</a></li>
+							<li><a href="#">Fee Balance</a></li>
+						</ul>
+					</li>
+				</ul>
+				<div class="left-content-box uk-margin-top">
+					<h5>Daily Reports</h5>
+					<div>
+						<span class="uk-text-small">Traffic <small>(+50)</small></span>
+						<progress class="uk-progress" value="50" max="100"></progress>
+					</div>
+					<div>
+						<span class="uk-text-small">Income <small>(+78)</small></span>
+						<progress
+							class="uk-progress success"
+							value="78"
+							max="100"
+						></progress>
+					</div>
+					<div>
+						<span class="uk-text-small">Feedback <small>(-12)</small></span>
+						<progress
+							class="uk-progress warning"
+							value="12"
+							max="100"
+						></progress>
+					</div>
+				</div>
+			</div>
+			<div class="bar-bottom">
+				<ul
+					class="uk-subnav uk-flex uk-flex-center uk-child-width-1-5"
+					data-uk-grid
+				>
+					<li>
+						<a
+							href="#"
+							class="uk-icon-link"
+							data-uk-icon="icon: home"
+							title="Home"
+							data-uk-tooltip
+						></a>
+					</li>
+					<li>
+						<a
+							href="#"
+							class="uk-icon-link"
+							data-uk-icon="icon: settings"
+							title="Settings"
+							data-uk-tooltip
+						></a>
+					</li>
+					<li>
+						<a
+							href="#"
+							class="uk-icon-link"
+							data-uk-icon="icon: social"
+							title="Social"
+							data-uk-tooltip
+						></a>
+					</li>
+
+					<li>
+						<a
+							href="/logout"
+							class="uk-icon-link"
+							data-uk-tooltip="Sign out"
+							data-uk-icon="icon: sign-out"
+						></a>
+					</li>
+				</ul>
+			</div>
+		</aside>
+		<!-- /LEFT BAR -->
+		<!-- CONTENT -->
+		<div id="content" data-uk-height-viewport="expand: true">
+			<div class="uk-container uk-container-expand">
+				<div
+					class="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl"
+					data-uk-grid
+				>
+					<div>
+						<span class="uk-text-small"
+							><span
+								data-uk-icon="icon:users"
+								class="uk-margin-small-right uk-text-primary"
+							></span
+							>New Users</span
+						>
+						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
+							2.134
+						</h1>
+						<div class="uk-text-small">
+							<span class="uk-text-success" data-uk-icon="icon: triangle-up"
+								>15%</span
+							>
+							more than last week.
+						</div>
+					</div>
+					<div>
+						<span class="uk-text-small"
+							><span
+								data-uk-icon="icon:social"
+								class="uk-margin-small-right uk-text-primary"
+							></span
+							>Social Media</span
+						>
+						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
+							8.490
+						</h1>
+						<div class="uk-text-small">
+							<span class="uk-text-warning" data-uk-icon="icon: triangle-down"
+								>-15%</span
+							>
+							less than last week.
+						</div>
+					</div>
+					<div>
+						<span class="uk-text-small"
+							><span
+								data-uk-icon="icon:clock"
+								class="uk-margin-small-right uk-text-primary"
+							></span
+							>Traffic hours</span
+						>
+						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
+							12.00<small class="uk-text-small">PM</small>
+						</h1>
+						<div class="uk-text-small">
+							<span class="uk-text-success" data-uk-icon="icon: triangle-up">
+								19%</span
+							>
+							more than last week.
+						</div>
+					</div>
+					<div>
+						<span class="uk-text-small"
+							><span
+								data-uk-icon="icon:search"
+								class="uk-margin-small-right uk-text-primary"
+							></span
+							>Week Search</span
+						>
+						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
+							9.543
+						</h1>
+						<div class="uk-text-small">
+							<span class="uk-text-danger" data-uk-icon="icon: triangle-down">
+								-23%</span
+							>
+							less than last week.
+						</div>
+					</div>
+					<div class="uk-visible@xl">
+						<span class="uk-text-small"
+							><span
+								data-uk-icon="icon:users"
+								class="uk-margin-small-right uk-text-primary"
+							></span
+							>Lorem ipsum</span
+						>
+						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
+							5.284
+						</h1>
+						<div class="uk-text-small">
+							<span class="uk-text-success" data-uk-icon="icon: triangle-up">
+								7%</span
+							>
+							more than last week.
+						</div>
+					</div>
+				</div>
+				<hr />
+
+				<!-- Articles -->
+				<!-- <section class="uk-section uk-section-muted"> -->
+				<div class="uk-container" id="UpcomingEvents">
+					<h2 class="uk-text-bold">Upcoming Events</h2>
+					<div data-uk-slider="velocity: 5">
+						<div class="uk-position-relative">
+							<div class="uk-slider-container">
+								<ul
+									class="uk-slider-items uk-child-width-1-2@s uk-child-width-1-3@m uk-grid uk-grid-medium"
+								>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=1"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=2"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=3"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=4"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=5"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=6"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+									<li>
+										<!-- card -->
+										<div>
+											<div
+												class="uk-card uk-card-default uk-card-small"
+												style="box-shadow: none"
+											>
+												<div class="uk-card-media-top">
+													<!-- <a href="#"
+														><img
+															data-src="https://unsplash.it/620/350/?random=7"
+															width="620"
+															height="350"
+															data-uk-img="target: !.uk-slideshow-items"
+															alt=""
+													/></a> -->
+												</div>
+												<div class="uk-card-header">
+													<div
+														class="uk-grid-small uk-flex-middle"
+														data-uk-grid
+													>
+														<div class="uk-width-auto">
+															<img
+																class="uk-border-circle"
+																alt=""
+																width="40"
+																height="40"
+																src="https://unsplash.it/60/60/?random"
+															/>
+														</div>
+														<div class="uk-width-expand">
+															<h6 class="uk-margin-remove-bottom uk-text-bold">
+																Author Name
+															</h6>
+															<p
+																class="uk-text-meta uk-margin-remove-top uk-text-small"
+															>
+																<time datetime="2016-04-01T19:00"
+																	>April 01, 2016</time
+																>
+															</p>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h4 class="uk-margin-small-bottom uk-text-bold">
+														Sed do eiusmod tempor incididunt
+													</h4>
+													<span class="uk-text-small"
+														>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit, sed do eiusmod tempor incididunt.</span
+													>
+													<a
+														class="uk-button uk-button-text uk-text-bold uk-margin-small"
+														href=""
+														>READ MORE</a
+													>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</li>
+								</ul>
+							</div>
+							<ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+							<div class="uk-hidden@m uk-light">
+								<a
+									class="uk-position-center-left uk-position-small"
+									href="#"
+									data-uk-slidenav-previous
+									data-uk-slider-item="previous"
+								></a>
+								<a
+									class="uk-position-center-right uk-position-small"
+									href="#"
+									data-uk-slidenav-next
+									data-uk-slider-item="next"
+								></a>
+							</div>
+							<div class="uk-visible@m">
+								<a
+									class="uk-position-center-left-out uk-position-small"
+									href="#"
+									data-uk-slidenav-previous
+									data-uk-slider-item="previous"
+								></a>
+								<a
+									class="uk-position-center-right-out uk-position-small"
+									href="#"
+									data-uk-slidenav-next
+									data-uk-slider-item="next"
+								></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- </section> -->
+				<!-- /Articles -->
+
+				<!--  -->
+				<div
+					class="uk-grid uk-grid-medium"
+					data-uk-grid
+					uk-sortable="handle: .sortable-icon"
+				>
+					<!-- panel -->
+					<div class="uk-width-1-2@l">
+						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto"><h4>Sales Chart</h4></div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div class="uk-card-body">
+								<div class="chart-container">
+									<canvas id="chart2"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+
+					<!-- Table Added  -->
+
+					<!-- panel -->
+					<div class="uk-width-1-2@l">
+						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto">
+										<h4>Content Table</h4>
+									</div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div class="uk-card-body">
+								<div>
+									<table class="uk-table uk-table-striped">
+										<thead>
+											<tr>
+												<th>Table Heading</th>
+												<th>Table Heading</th>
+												<th>Table Heading</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Table Data</td>
+												<td>Table Data</td>
+												<td>Table Data</td>
+											</tr>
+											<tr>
+												<td>Table Data</td>
+												<td>Table Data</td>
+												<td>Table Data</td>
+											</tr>
+											<tr>
+												<td>Table Data</td>
+												<td>Table Data</td>
+												<td>Table Data</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+
+					<!-- Added Actions  -->
+					<!-- panel -->
+					<div class="uk-width-1-2@l">
+						<div class="uk-card">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto">
+										<h4>Cards Content</h4>
+									</div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div>
+								<div
+									class="uk-child-width-1-3@m uk-grid-small uk-grid-match"
+									uk-grid
+								>
+									<div>
+										<div class="uk-card uk-card-default uk-card-body">
+											<h3 class="uk-card-title">Default</h3>
+											<p>
+												Lorem ipsum dolor sit amet, consectetur adipisicing
+												elit.
+											</p>
+										</div>
+									</div>
+									<div>
+										<div class="uk-card uk-card-primary uk-card-body">
+											<h3 class="uk-card-title">Primary</h3>
+											<p>
+												Lorem ipsum dolor sit amet, consectetur adipisicing
+												elit.
+											</p>
+										</div>
+									</div>
+									<div>
+										<div class="uk-card uk-card-secondary uk-card-body">
+											<h3 class="uk-card-title">Secondary</h3>
+											<p>
+												Lorem ipsum dolor sit amet, consectetur adipisicing
+												elit.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+
+					<!-- panel -->
+					<div class="uk-width-1-2@l">
+						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto"><h4>Predictions Chart</h4></div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div class="uk-card-body">
+								<div class="chart-container">
+									<canvas id="chart1"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+					<!-- panel -->
+					<div class="uk-width-1-1 uk-width-1-3@l uk-width-1-2@xl">
+						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto"><h4>Activity Chart</h4></div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div class="uk-card-body">
+								<div class="chart-container">
+									<canvas id="chart3"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+					<!-- panel -->
+					<div class="uk-width-1-2@s uk-width-1-3@l uk-width-1-4@xl">
+						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto"><h4>Distribution Chart</h4></div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div class="uk-card-body">
+								<div class="chart-container">
+									<canvas id="chart4"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+					<!-- panel -->
+					<div class="uk-width-1-2@s uk-width-1-3@l uk-width-1-4@xl">
+						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto"><h4>Population Chart</h4></div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Configuration"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="#"
+											class="uk-icon-link"
+											title="Close"
+											data-uk-tooltip
+											data-uk-icon="icon: close"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div class="uk-card-body">
+								<div class="chart-container">
+									<canvas id="chart5"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+				</div>
+				<footer class="uk-section uk-section-small uk-text-center">
+					<hr />
+					<p class="uk-text-small uk-text-center">
+						Copyright 2019 -
+						<a href="https://github.com/zzseba78/Kick-Off"
+							>Created by KickOff</a
+						>
+						| Built with
+						<a
+							href="http://getuikit.com"
+							title="Visit UIkit 3 site"
+							target="_blank"
+							data-uk-tooltip
+							><span data-uk-icon="uikit"></span
+						></a>
+					</p>
+				</footer>
+			</div>
+		</div>
+		<!-- /CONTENT -->
+		<!-- OFFCANVAS -->
+		<div id="offcanvas-nav" data-uk-offcanvas="flip: true; overlay: true">
+			<div
+				class="uk-offcanvas-bar uk-offcanvas-bar-animation uk-offcanvas-slide"
+			>
+				<button
+					class="uk-offcanvas-close uk-close uk-icon"
+					type="button"
+					data-uk-close
+				></button>
+				<ul class="uk-nav uk-nav-default">
+					<li class="uk-active"><a href="#">Active</a></li>
+					<li class="uk-parent">
+						<a href="#">Parent</a>
+						<ul class="uk-nav-sub">
+							<li><a href="#">Sub item</a></li>
+							<li><a href="#">Sub item</a></li>
+						</ul>
+					</li>
+					<li class="uk-nav-header">Header</li>
+					<li>
+						<a href="#js-options"
+							><span
+								class="uk-margin-small-right uk-icon"
+								data-uk-icon="icon: table"
+							></span>
+							Item</a
+						>
+					</li>
+					<li>
+						<a href="#"
+							><span
+								class="uk-margin-small-right uk-icon"
+								data-uk-icon="icon: thumbnails"
+							></span>
+							Item</a
+						>
+					</li>
+					<li class="uk-nav-divider"></li>
+					<li>
+						<a href="#"
+							><span
+								class="uk-margin-small-right uk-icon"
+								data-uk-icon="icon: trash"
+							></span>
+							Item</a
+						>
+					</li>
+				</ul>
+				<h3>Title</h3>
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+					eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+					minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+					aliquip ex ea commodo consequat.
+				</p>
+			</div>
+		</div>
+		<!-- /OFFCANVAS -->
+
+		<!-- JS FILES -->
+		<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+		<script src="js/chartScripts.js"></script>
+	</body>
+</html>
