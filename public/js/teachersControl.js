@@ -41,10 +41,7 @@ async function getTeachers() {
 										</div>
 									</div>
 									<!-- /card -->
-                                </div>
-
-										
-                                        <div class="uk-width-auto">
+                                </div><div class="uk-width-auto">
                                             <div class="uk-inline">
                                                 <a data-uk-icon="icon:more-vertical"></a>
                                                 <div data-uk-dropdown="mode: click; pos:top-right">

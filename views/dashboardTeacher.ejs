@@ -6,6 +6,12 @@
 		<title>Teachers Portal Faith Baptist Academy</title>
 		<!-- CSS FILES -->
 		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous"
+		/>
+		<link
 			rel="stylesheet"
 			type="text/css"
 			href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css"
@@ -132,7 +138,7 @@
 			<div class="left-content-box content-box-dark">
 				<img src="img/avatar.svg" alt="" class="uk-border-circle profile-img" />
 				<h4 class="uk-text-center uk-margin-remove-vertical text-light">
-					Tr. Kemoi
+					<%= userName %>
 				</h4>
 
 				<div class="uk-position-relative uk-text-center uk-display-block">
@@ -140,8 +146,8 @@
 						href="#"
 						class="uk-text-small uk-text-muted uk-display-block uk-text-center"
 						data-uk-icon="icon: triangle-down; ratio: 0.7"
-						>Teacher</a
-					>
+						><%= userType %>
+					</a>
 					<!-- user dropdown -->
 					<div
 						class="uk-dropdown user-drop"
@@ -155,9 +161,13 @@
 								<a href="#"><span data-uk-icon="icon: refresh"></span> Edit</a>
 							</li>
 							<li>
-								<a href="#"
-									><span data-uk-icon="icon: settings"></span> Configuration</a
-								>
+								<a class="uk-button" href="#modal-center" data-uk-toggle>
+									<span
+										data-uk-icon="icon: settings"
+										class="uk-margin-small-right"
+									></span
+									>Change Password
+								</a>
 							</li>
 							<li class="uk-nav-divider"></li>
 							<li>
@@ -296,19 +306,6 @@
 							>Messages</a
 						>
 					</li>
-					<!-- <li class="uk-parent">
-						<a href="#"
-							><span
-								data-uk-icon="icon: comments"
-								class="uk-margin-small-right"
-							></span
-							>Questions</a
-						>
-						<ul class="uk-nav-sub">
-							<li><a href="#">Download </a></li>
-							<li><a href="#">Fee Balance</a></li>
-						</ul>
-					</li> -->
 				</ul>
 				<div class="left-content-box uk-margin-top">
 					<h5>Daily Reports</h5>
@@ -379,6 +376,59 @@
 			</div>
 		</aside>
 		<!-- /LEFT BAR -->
+		<!-- MODALS -->
+		<div id="modal-center" class="uk-flex-top" data-uk-modal>
+			<div
+				class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical card rounded"
+			>
+				<button
+					class="uk-modal-close-default"
+					type="button"
+					data-uk-close
+				></button>
+
+				<div class="container form-container">
+					<h2 class="text-center">Change Password</h2>
+					<form
+						id="changePasswordForm"
+						method="post"
+						action="/teachers/<%=userId%>/password"
+					>
+						<div class="form-group">
+							<label for="newPassword">New Password</label>
+							<input
+								type="password"
+								class="form-control"
+								id="newPassword"
+								name="password"
+								placeholder="Enter new password"
+								required
+							/>
+						</div>
+						<div class="form-group">
+							<label for="confirmPassword">Confirm New Password</label>
+							<input
+								type="password"
+								class="form-control"
+								id="confirmPassword"
+								placeholder="Confirm new password"
+								required
+							/>
+							<div
+								id="passwordHelp"
+								class="form-text text-danger"
+								style="display: none"
+							>
+								Passwords do not match!
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">
+							Change Password
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
 		<!-- CONTENT -->
 		<div id="content" data-uk-height-viewport="expand: true">
 			<div class="uk-container uk-container-expand">
@@ -1019,7 +1069,18 @@
 		<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+			integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+			crossorigin="anonymous"
+		></script>
 		<script src="js/chartScripts.js"></script>
 		<script src="js/teacher.js"></script>
+		<!-- jQuery and Bootstrap JS -->
 	</body>
 </html>

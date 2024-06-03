@@ -7,11 +7,12 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+const multer = require("multer");
+const path = require("path");
 
 const teachersRoutes = require("./routes/teachers");
 
 const app = express();
-app.set("view-engine", "ejs");
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,14 +26,17 @@ app.use(
 	})
 );
 
+const eventsRoutes = require("./routes/events");
+app.use("/", eventsRoutes);
+app.use("/", teachersRoutes);
 // Passport Configuration
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/SMS");
+
+const Assignment = require("./models/assignmentModel");
 
 // ADMIN SCHEMA DETAILS
 const adminSchema = new mongoose.Schema({
@@ -87,10 +91,6 @@ passport.serializeUser((user, done) => {
 	});
 });
 
-const eventsRoutes = require("./routes/events");
-app.use("/", eventsRoutes);
-app.use("/", teachersRoutes);
-
 passport.deserializeUser(async (obj, done) => {
 	try {
 		let user;
@@ -133,7 +133,11 @@ app.get("/dashboard", (req, res) => {
 			res.render("dashboardStudent");
 		} else if (dashType === "Teacher") {
 			console.log("Teachers Accessed");
-			res.render("dashboardTeacher");
+			res.render("dashboardTeacher", {
+				userName: req.user.username,
+				userId: req.user._id,
+				userType: dashType,
+			});
 		} else {
 			res.send("You are not the admin");
 		}
@@ -337,7 +341,8 @@ app.post("/teachers/:id/password", async (req, res) => {
 				return res.status(500).json({ error: err.message });
 			}
 			await teacher.save();
-			res.status(200).json({ message: "Password updated successfully" });
+			res.status(200).redirect("/login");
+			// res.status(200).json({ message: "Password updated successfully" });
 		});
 	} catch (err) {
 		res.status(500).json({ error: err.message });
@@ -364,3 +369,69 @@ function getCurrentDate() {
 	const year = today.getFullYear();
 	return `${day}, ${month}, ${year}`;
 }
+
+// Assignments
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "Assignments/Given");
+	},
+	filename: (req, file, cb) => {
+		// Use the original name of the file
+		cb(null, file.originalname);
+	},
+});
+
+const upload = multer({
+	storage: storage,
+	fileFilter: (req, file, cb) => {
+		const validTypes = [
+			"text/plain",
+			"application/pdf",
+			"application/msword",
+			"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		];
+		if (validTypes.includes(file.mimetype)) {
+			cb(null, true);
+		} else {
+			cb(new Error("Invalid file type"), false);
+		}
+	},
+});
+
+// Handle file upload and save metadata to MongoDB
+app.post("/upload", upload.single("file"), async (req, res) => {
+	try {
+		if (req.isAuthenticated()) {
+			const data = JSON.parse(req.body.more);
+
+			const filePath = req.file.path;
+
+			const creator = req.user.username;
+			const creationDate = getCurrentDate();
+			const goodTitle = req.file.originalname.split(".");
+			const name = goodTitle[0];
+			const description = data.description;
+			const subject = data.subject;
+
+			const newAssignment = new Assignment({
+				title: name,
+				description: description,
+				filePath: filePath,
+				createdBy: creator,
+				createdAt: creationDate,
+				subject: subject,
+			});
+
+			const saveStatus = await newAssignment.save();
+
+			res.status(201).json({
+				message: "File uploaded and saved successfully",
+				assignment: saveStatus,
+			});
+		}
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: "Error uploading file", error: error.message });
+	}
+});
