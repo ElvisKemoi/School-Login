@@ -8,11 +8,14 @@ const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
-const app = express();
+const teachersRoutes = require("./routes/teachers");
 
+const app = express();
+app.set("view-engine", "ejs");
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(
 	session({
@@ -21,6 +24,10 @@ app.use(
 		saveUninitialized: false,
 	})
 );
+
+// Passport Configuration
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -31,6 +38,7 @@ mongoose.connect("mongodb://localhost:27017/SMS");
 const adminSchema = new mongoose.Schema({
 	email: String,
 	password: String,
+	joined: String,
 	secret: String,
 });
 
@@ -43,6 +51,7 @@ passport.use("admin-local", Admin.createStrategy());
 const studentSchema = new mongoose.Schema({
 	email: String,
 	password: String,
+	joined: String,
 	secret: String,
 });
 
@@ -55,6 +64,7 @@ passport.use("student-local", Student.createStrategy());
 const teacherSchema = new mongoose.Schema({
 	email: String,
 	password: String,
+	joined: String,
 	secret: String,
 });
 
@@ -77,6 +87,10 @@ passport.serializeUser((user, done) => {
 	});
 });
 
+const eventsRoutes = require("./routes/events");
+app.use("/", eventsRoutes);
+app.use("/", teachersRoutes);
+
 passport.deserializeUser(async (obj, done) => {
 	try {
 		let user;
@@ -94,7 +108,7 @@ passport.deserializeUser(async (obj, done) => {
 });
 app.get("/", (req, res) => {
 	// res.render("home");
-	res.render("album");
+	res.render("cover");
 });
 
 app.get("/login", (req, res) => {
@@ -106,8 +120,8 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/dashboard", (req, res) => {
-	console.log(req.user);
-	console.log(req.session.passport.user.type);
+	// console.log(req.user);
+	// console.log(req.session.passport.user.type);
 
 	if (req.isAuthenticated()) {
 		let dashType = req.session.passport.user.type;
@@ -132,7 +146,7 @@ app.get("/dashboard", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-	console.log(req.session);
+	// console.log(req.session);
 	// req.logOut();
 	req.session.destroy((err) => {
 		if (err) {
@@ -144,7 +158,7 @@ app.get("/logout", (req, res) => {
 
 // Register Route
 app.post("/register", (req, res) => {
-	console.log(req.body);
+	// console.log(req.body);
 	const userType = req.body.userType; // Assuming userType is passed in the request body
 	let UserModel;
 	if (userType === "Admin") {
@@ -158,7 +172,7 @@ app.post("/register", (req, res) => {
 	}
 
 	UserModel.register(
-		{ username: req.body.username },
+		{ username: req.body.username, joined: getCurrentDate() },
 		req.body.password,
 		(err, user) => {
 			if (err) {
@@ -215,3 +229,138 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
 	console.log("Server is live on port 3000");
 });
+
+// Assignments
+
+app.get("/assignments", (req, res) => {
+	if (req.isAuthenticated()) {
+		res.render("album");
+	} else {
+		res.redirect("/login");
+	}
+});
+
+//TEACHERS
+/// Fetch all teachers
+app.get("/teachers", async (req, res) => {
+	try {
+		const teachers = await Teacher.find();
+		res.status(200).json(teachers);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+});
+
+//Add a new teacher to the list
+
+app.post("/teachers/add", async (req, res) => {
+	if (req.isAuthenticated()) {
+		Teacher.register(
+			{ username: req.body.username, joined: getCurrentDate() },
+			req.body.password,
+			(err, user) => {
+				if (err) {
+					res.status(500).json({ error: err });
+					console.log(err);
+					// res.redirect("/register");
+				} else {
+					res.redirect("/teachersList");
+					// passport.authenticate(`${userType.toLowerCase()}-local`)(
+					// 	req,
+					// 	res,
+					// 	() => {
+					// 		res.redirect("/dashboard");
+					// 	}
+					// );
+				}
+			}
+		);
+	}
+});
+
+// Fetch a particular teacher based on the ID
+app.get("/teachers/:id", async (req, res) => {
+	try {
+		const teacher = await Teacher.findById(req.params.id);
+		if (!teacher) {
+			return res.status(404).json({ error: "Teacher not found" });
+		}
+		res.status(200).json(teacher);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+});
+
+// Delete a particular teacher
+app.post("/teachers/delete/:id", async (req, res) => {
+	try {
+		if (req.isAuthenticated()) {
+			const teacher = await Teacher.findByIdAndDelete(req.params.id);
+			if (!teacher) {
+				return res.status(404).json({ error: "Teacher not found" });
+			}
+			res.redirect("/teachersList");
+		} else {
+			res.status(401).send("Unauthorized Action");
+		}
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+});
+
+// Update a particular detail in the teacher DB
+app.post("/teachers/update/:id", async (req, res) => {
+	console.log(req.body);
+	try {
+		const updates = req.body;
+		const teacher = await Teacher.findByIdAndUpdate(req.params.id, updates, {
+			new: true,
+		});
+		if (!teacher) {
+			return res.status(404).json({ error: "Teacher not found" });
+		}
+		res.status(200).json(teacher);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+});
+// Update the password of a particular teacher based on the ID
+app.post("/teachers/:id/password", async (req, res) => {
+	try {
+		const { password } = req.body;
+		const teacher = await Teacher.findById(req.params.id);
+		if (!teacher) {
+			return res.status(404).json({ error: "Teacher not found" });
+		}
+		teacher.setPassword(password, async (err) => {
+			if (err) {
+				return res.status(500).json({ error: err.message });
+			}
+			await teacher.save();
+			res.status(200).json({ message: "Password updated successfully" });
+		});
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
+});
+function getCurrentDate() {
+	const months = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+	const today = new Date();
+	const day = String(today.getDate()).padStart(2, "0");
+	const month = months[today.getMonth()];
+	const year = today.getFullYear();
+	return `${day}, ${month}, ${year}`;
+}

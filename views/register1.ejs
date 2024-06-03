@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Register</title>
+		<title>Faith Baptist Academy Register</title>
 		<link rel="icon" href="img/favicon.ico" />
 		<!-- CSS FILES -->
 		<link
@@ -19,10 +19,13 @@
 		<div
 			class="uk-position-bottom-center uk-position-small uk-visible@m uk-position-z-index"
 		>
+			<!-- TODO ADD COMPANY NAME  -->
 			<span class="uk-text-small uk-text-muted"
-				>© 2019 Company Name -
-				<a href="https://github.com/zzseba78/Kick-Off">Created by KickOff</a> |
-				Built with
+				>© 2024 Company Name -
+				<a href="https://github.com/zzseba78/Kick-Off"
+					>Created by Dev Austine Alex &amp; Dev Elvis Kemoi</a
+				>
+				| Built with
 				<a
 					href="http://getuikit.com"
 					title="Visit UIkit 3 site"
@@ -32,9 +35,59 @@
 			></span>
 		</div>
 		<div class="uk-width-medium uk-padding-small">
-			<!-- login -->
+			<div class="uk-text-center uk-margin">
+				<!-- <img src="img/login-logo.svg" alt="Logo" /> -->
+				Faith Baptist Academy
+			</div>
+			<!-- REGISTER -->
 			<form class="toggle-class" action="/register" method="post">
 				<fieldset class="uk-fieldset">
+					<div class="uk-inline uk-width-1-1">
+						<h2>Register as ?</h2>
+						<span
+							class="uk-form-icon uk-form-icon-flip"
+							data-uk-icon="icon: user"
+						></span>
+					</div>
+					<div class="uk-margin-small">
+						<div class="form-check">
+							<input
+								class="form-check-input"
+								type="radio"
+								name="userType"
+								id="flexRadioDefault2"
+								value="Student"
+								checked
+							/>
+							<label class="form-check-label" for="flexRadioDefault2">
+								Student
+							</label>
+						</div>
+						<!-- <div class="form-check">
+							<input
+								class="form-check-input"
+								type="radio"
+								value="Teacher"
+								name="userType"
+								id="flexRadioDefault3"
+							/>
+							<label class="form-check-label" for="flexRadioDefault3">
+								Teacher
+							</label>
+						</div> -->
+						<div class="form-check">
+							<input
+								class="form-check-input"
+								type="radio"
+								value="Admin"
+								name="userType"
+								id="flexRadioDefault1"
+							/>
+							<label class="form-check-label" for="flexRadioDefault1">
+								Admin
+							</label>
+						</div>
+					</div>
 					<div class="uk-margin-small">
 						<div class="uk-inline uk-width-1-1">
 							<span
@@ -45,7 +98,7 @@
 								class="uk-input uk-border-pill"
 								required
 								placeholder="Username"
-								type="email"
+								type="text"
 								name="username"
 							/>
 						</div>
@@ -65,45 +118,7 @@
 							/>
 						</div>
 					</div>
-					<div class="uk-margin-small">
-						<div class="form-check">
-							<input
-								class="form-check-input"
-								type="radio"
-								name="userType"
-								id="flexRadioDefault2"
-								value="Student"
-								checked
-							/>
-							<label class="form-check-label" for="flexRadioDefault2">
-								Student
-							</label>
-						</div>
-						<div class="form-check">
-							<input
-								class="form-check-input"
-								type="radio"
-								value="Teacher"
-								name="userType"
-								id="flexRadioDefault3"
-							/>
-							<label class="form-check-label" for="flexRadioDefault3">
-								Teacher
-							</label>
-						</div>
-						<div class="form-check">
-							<input
-								class="form-check-input"
-								type="radio"
-								value="Admin"
-								name="userType"
-								id="flexRadioDefault1"
-							/>
-							<label class="form-check-label" for="flexRadioDefault1">
-								Admin
-							</label>
-						</div>
-					</div>
+
 					<div class="uk-margin-small">
 						<label
 							><input class="uk-checkbox" type="checkbox" /> Keep me logged
@@ -129,7 +144,7 @@
 			<!-- /login -->
 
 			<!-- recover password -->
-			<form class="toggle-class" action="login-dark.html" hidden>
+			<!-- <form class="toggle-class" action="login-dark.html" hidden>
 				<div class="uk-margin-small">
 					<div class="uk-inline uk-width-1-1">
 						<span
@@ -152,11 +167,11 @@
 						SEND PASSWORD
 					</button>
 				</div>
-			</form>
+			</form> -->
 			<!-- /recover password -->
 
 			<!-- action buttons -->
-			<div>
+			<!-- <div>
 				<div class="uk-text-center">
 					<a
 						class="uk-link-reset uk-text-small toggle-class"
@@ -170,7 +185,7 @@
 						><span data-uk-icon="arrow-left"></span> Back to Login</a
 					>
 				</div>
-			</div>
+			</div> -->
 			<!-- action buttons -->
 		</div>
 
