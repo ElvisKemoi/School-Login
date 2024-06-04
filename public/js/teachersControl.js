@@ -57,11 +57,11 @@ async function getTeachers() {
                                                     <button
                                                         type="button"
                                                         class="uk-icon-link"
-                                                        title="Delete Event"
+                                                        title="Delete Teacher"
                                                         data-uk-tooltip
                                                         data-uk-icon="icon: trash"
                                                         onclick="confirmDelete()"
-                                                    >Remove Teacher</button>
+                                                    ></button>
                                                 </form>
                                                     </div></li>
                                                     </ul>

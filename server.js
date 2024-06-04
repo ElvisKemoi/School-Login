@@ -9,8 +9,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const multer = require("multer");
 const path = require("path");
-
-const teachersRoutes = require("./routes/teachers");
+const fs = require("fs");
 
 const app = express();
 app.use(express.static("public"));
@@ -28,7 +27,7 @@ app.use(
 
 const eventsRoutes = require("./routes/events");
 app.use("/", eventsRoutes);
-app.use("/", teachersRoutes);
+const teachersRoutes = require("./routes/teachers");
 // Passport Configuration
 
 app.use(passport.initialize());
@@ -106,6 +105,7 @@ passport.deserializeUser(async (obj, done) => {
 		done(err, null);
 	}
 });
+app.use("/", teachersRoutes);
 app.get("/", (req, res) => {
 	// res.render("home");
 	res.render("cover");
@@ -246,6 +246,7 @@ app.get("/assignments", (req, res) => {
 
 //TEACHERS
 /// Fetch all teachers
+
 app.get("/teachers", async (req, res) => {
 	try {
 		const teachers = await Teacher.find();
@@ -314,7 +315,7 @@ app.post("/teachers/delete/:id", async (req, res) => {
 
 // Update a particular detail in the teacher DB
 app.post("/teachers/update/:id", async (req, res) => {
-	console.log(req.body);
+	// console.log(req.body);
 	try {
 		const updates = req.body;
 		const teacher = await Teacher.findByIdAndUpdate(req.params.id, updates, {
@@ -428,6 +429,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 				message: "File uploaded and saved successfully",
 				assignment: saveStatus,
 			});
+			// res.redirect("/assignments");
 		}
 	} catch (error) {
 		res
@@ -435,3 +437,85 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 			.json({ message: "Error uploading file", error: error.message });
 	}
 });
+
+// 1. Get all assignments
+app.get("/assignments/all", async (req, res) => {
+	try {
+		const assignments = await Assignment.find();
+		res.json(assignments);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
+app.post("/assignments/all", async (req, res) => {
+	// console.log(req.user);
+	if (req.isAuthenticated()) {
+		try {
+			const assignments = await Assignment.find({
+				createdBy: req.user.username,
+			});
+			res.json(assignments);
+		} catch (err) {
+			res.status(500).json({ message: err.message });
+		}
+	} else {
+		res.redirect("/login");
+	}
+});
+
+// 2. Get assignment by ID
+app.get("/assignments/:id", async (req, res) => {
+	if (req.isAuthenticated()) {
+		try {
+			const assignment = await Assignment.findById(req.params.id);
+			if (assignment == null) {
+				return res.status(404).json({ message: "Cannot find assignment" });
+			}
+			res.json(assignment);
+		} catch (err) {
+			res.status(500).json({ message: err.message });
+		}
+	} else {
+		res.redirect("/login");
+	}
+});
+
+// 3. Delete assignment by ID
+app.post("/assignments/delete/:id", async (req, res) => {
+	if (req.isAuthenticated()) {
+		try {
+			const deleteStatus = await deleteFile(req.body.filePath);
+
+			// Check if deleteStatus is false and throw an error
+			if (!deleteStatus) {
+				throw new Error("File deletion failed");
+			}
+
+			const assignment = await Assignment.findByIdAndDelete(req.params.id);
+			if (!assignment) {
+				return res.status(404).json({ message: "Cannot find assignment" });
+			}
+			// res.json({ message: "Deleted assignment" });
+			res.redirect("/assignments");
+		} catch (err) {
+			res.status(500).json({ message: err.message });
+		}
+	} else {
+		res.redirect("/login");
+	}
+});
+
+function deleteFile(filePath) {
+	return new Promise((resolve) => {
+		fs.unlink(filePath, (err) => {
+			if (err) {
+				console.error("Error removing file:", err);
+				resolve(false);
+			} else {
+				console.log("File removed successfully");
+				resolve(true);
+			}
+		});
+	});
+}
