@@ -26,7 +26,6 @@ app.use(
 );
 
 const eventsRoutes = require("./routes/events");
-app.use("/", eventsRoutes);
 const teachersRoutes = require("./routes/teachers");
 // Passport Configuration
 
@@ -106,6 +105,7 @@ passport.deserializeUser(async (obj, done) => {
 	}
 });
 app.use("/", teachersRoutes);
+app.use("/", eventsRoutes);
 app.get("/", (req, res) => {
 	// res.render("home");
 	res.render("cover");
@@ -300,7 +300,39 @@ app.get("/teachers/:id", async (req, res) => {
 app.post("/teachers/delete/:id", async (req, res) => {
 	try {
 		if (req.isAuthenticated()) {
+			const teacherUserName = await Teacher.find(
+				{ _id: req.params.id },
+				{ username: true, _id: false }
+			);
+			// Ensure you have the username by accessing the first element of the result array
+			const theUserName =
+				teacherUserName.length > 0 ? teacherUserName[0].username : null;
+
+			if (theUserName) {
+				const allAssignments = await Assignment.find(
+					{
+						createdBy: theUserName,
+					},
+					{ filePath: true, _id: true }
+				);
+				allAssignments.forEach((assignment, index) => {
+					deleteFile(assignment.filePath)
+						.then(async () => {
+							await Assignment.findByIdAndDelete(assignment._id);
+							// console.log("File " + index + " Deleted");
+						})
+						.catch((error) => {
+							console.error("Error deleting file " + index + ": ", error);
+						});
+				});
+
+				// console.log(allAssignments);
+			} else {
+				console.log("No teacher found with the given ID");
+			}
+
 			const teacher = await Teacher.findByIdAndDelete(req.params.id);
+
 			if (!teacher) {
 				return res.status(404).json({ error: "Teacher not found" });
 			}

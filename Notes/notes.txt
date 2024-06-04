@@ -1,0 +1,12 @@
+TODO 
+1. Delete all the files related to a particular teacher when the admin deletes a particular teacher's account 
+2. Teacher should be able to delete his/her own account 
+3. Add teacher details like the subjects he/she teaches.
+4. Pick the class and the subject for which the teacher is giving the assignment.
+5. Admins should be able to view the students' accounts and have the ability to add and remove any student from the database.
+6. Students should be able to see the assignments given based on the classes that they are assigned.
+7 Students should be able to submit the assignments before the given deadline. 
+8. Teachers should be able to grade the assignments. 
+9. Add some other fields on the "Add assignments" form. For example the date that the assignment is due and the class that the assignment is for. 
+10. Update the assignments schema to fit the above requirements. 
+11. 

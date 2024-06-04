@@ -6,7 +6,11 @@ const Event = require("../models/events"); // Adjust the path as necessary
 router.get("/events", async (req, res) => {
 	try {
 		const events = await Event.find();
-		res.status(200).json(events);
+		const sortedEvents = events.sort(
+			(a, b) => new Date(a.eventDate) - new Date(b.eventDate)
+		);
+
+		res.status(200).json(sortedEvents);
 	} catch (err) {
 		res.status(500).json({ message: err.message });
 	}
