@@ -87,6 +87,7 @@ function confirmDelete() {
 	Swal.fire({
 		title: "Are you sure?",
 		text: "You won't be able to revert this!",
+		html: "All data related to this account will be deleted including the assignments.",
 		icon: "warning",
 		confirmButtonText: "Yes, delete it!",
 		showCancelButton: true,

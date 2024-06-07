@@ -35,6 +35,15 @@ app.use(passport.session());
 mongoose.connect("mongodb://localhost:27017/SMS");
 
 const Assignment = require("./models/assignmentModel");
+const Class = require("./models/classModel");
+
+const newClass = new Class({
+	className: "Grade 6",
+	classCode: "Grade 6",
+	classTeacher: "doctor@kmckenya.co.ke",
+});
+
+// newClass.save();
 
 // ADMIN SCHEMA DETAILS
 const adminSchema = new mongoose.Schema({
@@ -119,25 +128,29 @@ app.get("/register", (req, res) => {
 	res.render("register1");
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", async (req, res) => {
 	// console.log(req.user);
 	// console.log(req.session.passport.user.type);
 
 	if (req.isAuthenticated()) {
 		let dashType = req.session.passport.user.type;
+		let numbers = await Numbers();
+		let data = {
+			userName: req.user.username,
+			userId: req.user._id,
+			userType: dashType,
+			numbers: numbers,
+		};
+		// TODO MAKE DIFFERENT USER_DATA DEPENDING ON THE TYPE OF USER
 		if (dashType === "Admin") {
-			console.log("Admin Accessed");
-			res.render("dashboardAdmin");
+			// console.log("Admin Accessed");
+			res.render("dashboardAdmin", data);
 		} else if (dashType === "Student") {
-			console.log("Students Accessed");
-			res.render("dashboardStudent");
+			// console.log("Students Accessed");
+			res.render("dashboardStudent", data);
 		} else if (dashType === "Teacher") {
-			console.log("Teachers Accessed");
-			res.render("dashboardTeacher", {
-				userName: req.user.username,
-				userId: req.user._id,
-				userType: dashType,
-			});
+			// console.log("Teachers Accessed");
+			res.render("dashboardTeacher", data);
 		} else {
 			res.send("You are not the admin");
 		}
@@ -235,10 +248,15 @@ app.listen(3000, () => {
 });
 
 // Assignments
-
-app.get("/assignments", (req, res) => {
+app.get("/assignments", async (req, res) => {
 	if (req.isAuthenticated()) {
-		res.render("album");
+		try {
+			const allClasses = await Class.find();
+			res.render("album", { classes: allClasses });
+		} catch (err) {
+			console.error(err);
+			res.status(500).send("Internal Server Error");
+		}
 	} else {
 		res.redirect("/login");
 	}
@@ -248,11 +266,15 @@ app.get("/assignments", (req, res) => {
 /// Fetch all teachers
 
 app.get("/teachers", async (req, res) => {
-	try {
-		const teachers = await Teacher.find();
-		res.status(200).json(teachers);
-	} catch (err) {
-		res.status(500).json({ error: err.message });
+	if (req.isAuthenticated()) {
+		try {
+			const teachers = await Teacher.find();
+			res.status(200).json(teachers);
+		} catch (err) {
+			res.status(500).json({ error: err.message });
+		}
+	} else {
+		req.redirect("/login");
 	}
 });
 
@@ -445,6 +467,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 			const name = goodTitle[0];
 			const description = data.description;
 			const subject = data.subject;
+			const asClass = data.AsClass;
 
 			const newAssignment = new Assignment({
 				title: name,
@@ -453,6 +476,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 				createdBy: creator,
 				createdAt: creationDate,
 				subject: subject,
+				AsClass: asClass,
 			});
 
 			const saveStatus = await newAssignment.save();
@@ -550,4 +574,25 @@ function deleteFile(filePath) {
 			}
 		});
 	});
+}
+
+async function Numbers() {
+	const studentsList = await Student.find({});
+	const studentNumbers = studentsList.length;
+
+	const teachersList = await Teacher.find({});
+	const teachersNumbers = teachersList.length;
+
+	const assignmentsList = await Assignment.find({});
+	const assignmentsNumbers = assignmentsList.length;
+
+	const classList = await Class.find({});
+	const classNumbers = classList.length;
+
+	return {
+		studentNumbers: studentNumbers,
+		teachersNumbers: teachersNumbers,
+		assignmentsNumbers: assignmentsNumbers,
+		classNumbers: classNumbers,
+	};
 }

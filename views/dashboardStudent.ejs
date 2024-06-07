@@ -134,7 +134,7 @@
 			<div class="left-content-box content-box-dark">
 				<img src="img/avatar.svg" alt="" class="uk-border-circle profile-img" />
 				<h4 class="uk-text-center uk-margin-remove-vertical text-light">
-					Elvis Kemoi
+					<%= userName %>
 				</h4>
 
 				<div class="uk-position-relative uk-text-center uk-display-block">
@@ -937,7 +937,9 @@
 					</div>
 					<!-- /panel -->
 				</div>
-				<footer class="uk-section uk-section-small uk-text-center">
+				<%- include("./partials/footer.ejs") -%>
+
+				<!-- <footer class="uk-section uk-section-small uk-text-center">
 					<hr />
 					<p class="uk-text-small uk-text-center">
 						Copyright 2019 -
@@ -953,7 +955,7 @@
 							><span data-uk-icon="uikit"></span
 						></a>
 					</p>
-				</footer>
+				</footer> -->
 			</div>
 		</div>
 		<!-- /CONTENT -->

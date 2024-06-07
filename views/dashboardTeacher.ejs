@@ -63,10 +63,24 @@
 											>
 										</li>
 										<li class="uk-nav-divider"></li>
+										<form
+											id="deleteForm"
+											action="/teachers/delete/<%= userId%>"
+											method="post"
+										>
 										<li>
-											<a href="#"
-												><span data-uk-icon="icon: image"></span> Your Data</a
-											>
+												<button
+													type="button"
+													class="uk-icon-link text-dark"
+													title="Delete Your Account"
+													data-uk-tooltip
+													data-uk-icon="icon: trash"
+													onclick="confirmDelete()"
+												>
+												
+												 Delete Your Account
+												</button>
+											</form>
 										</li>
 										<li class="uk-nav-divider"></li>
 										<li>
@@ -174,7 +188,8 @@
 							<li class="uk-nav-divider"></li>
 							<li>
 								<a href="#"
-									><span data-uk-icon="icon: image"></span> Your Data</a
+									><span data-uk-icon="icon: trash"></span> Delete Your
+									Account</a
 								>
 							</li>
 							<li class="uk-nav-divider"></li>
@@ -394,7 +409,7 @@
 					<form
 						id="changePasswordForm"
 						method="post"
-						action="/teachers/<%=userId%>/password"
+						action="/teachers/<%=userId %>/password"
 					>
 						<div class="form-group">
 							<label for="newPassword">New Password</label>
@@ -987,7 +1002,9 @@
 					</div>
 					<!-- /panel -->
 				</div>
-				<footer class="uk-section uk-section-small uk-text-center">
+				<%- include("./partials/footer.ejs") -%>
+
+				<!-- <footer class="uk-section uk-section-small uk-text-center">
 					<hr />
 					<p class="uk-text-small uk-text-center">
 						Copyright 2019 -
@@ -1003,7 +1020,7 @@
 							><span data-uk-icon="uikit"></span
 						></a>
 					</p>
-				</footer>
+				</footer> -->
 			</div>
 		</div>
 		<!-- /CONTENT -->
@@ -1081,6 +1098,7 @@
 			integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
 			crossorigin="anonymous"
 		></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<script src="js/chartScripts.js"></script>
 		<script src="js/teacher.js"></script>
 		<!-- jQuery and Bootstrap JS -->

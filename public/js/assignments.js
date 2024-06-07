@@ -35,9 +35,11 @@ async function uploadFile() {
 	const formData = new FormData();
 	const subject = document.getElementById("subject");
 	const description = document.getElementById("instructions");
+	const asClass = document.getElementById("AsClass");
 	const more = {
 		subject: subject.value,
 		description: description.value,
+		AsClass: asClass.value,
 	};
 
 	formData.append("file", file);
@@ -113,7 +115,7 @@ async function getAssignments() {
 					<span class="cat-txt">${assignment.subject}</span>
 				  </div>
 				  <div class="uk-width-auto uk-text-right uk-text-muted">
-					<span data-uk-icon="icon:clock; ratio: 0.8"></span> 2 days left
+					 ${assignment.AsClass}
 				  </div>
 				</div>
 			  </div>
@@ -148,10 +150,12 @@ async function getAssignments() {
 					${formattedDate}
 				  </div>
 				  <div class="uk-width-auto uk-text-right">
-					<a href="#" data-uk-tooltip="title: Twitter" class="uk-icon-link" data-uk-icon="icon:twitter; ratio: 0.8"></a>
+					<!--<a href="#" data-uk-tooltip="title: Twitter" class="uk-icon-link" data-uk-icon="icon:twitter; ratio: 0.8"></a>
 					<a href="#" data-uk-tooltip="title: Instagram" class="uk-icon-link" data-uk-icon="icon:instagram; ratio: 0.8"></a>
 					<a href="#" data-uk-tooltip="title: Behance" class="uk-icon-link" data-uk-icon="icon:behance; ratio: 0.8"></a>
-					<a href="#" data-uk-tooltip="title: Pinterest" class="uk-icon-link" data-uk-icon="icon:pinterest; ratio: 0.8"></a>
+					<a href="#" data-uk-tooltip="title: Pinterest" class="uk-icon-link" data-uk-icon="icon:pinterest; ratio: 0.8"></a>-->
+					<span data-uk-icon="icon:clock; ratio: 0.8"></span>2 days left
+					
 				  </div>
 				  <div class="uk-width-auto uk-text-right">
 				  <form id="deleteForm" action="/assignments/delete/${assignmentId}" method="post">

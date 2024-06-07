@@ -11,6 +11,7 @@ const assignmentSchema = new mongoose.Schema({
 	},
 	createdAt: { type: Date, default: Date.now },
 	subject: { type: String, required: true },
+	AsClass: { type: String, required: true },
 });
 
 const Assignment = mongoose.model("Assignment", assignmentSchema);

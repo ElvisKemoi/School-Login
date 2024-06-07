@@ -77,3 +77,20 @@ function formatDate(dateString) {
 	// Return the formatted date string
 	return `${day}, ${month}, ${year}`;
 }
+
+function confirmDelete() {
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You won't be able to revert this!",
+		html: "All data related to this account will be deleted including the assignments.",
+		icon: "warning",
+		confirmButtonText: "Yes, delete it!",
+		showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+	}).then((result) => {
+		if (result.isConfirmed) {
+			document.getElementById("deleteForm").submit();
+		}
+	});
+}

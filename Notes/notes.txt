@@ -9,4 +9,5 @@ TODO
 8. Teachers should be able to grade the assignments. 
 9. Add some other fields on the "Add assignments" form. For example the date that the assignment is due and the class that the assignment is for. 
 10. Update the assignments schema to fit the above requirements. 
-11. 
+11. Add numbers function in the serve that will return the numbers of all the students, teachers, assignments. 
+12. Add classes. Make a classes schema and model
