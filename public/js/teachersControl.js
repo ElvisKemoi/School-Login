@@ -16,6 +16,8 @@ async function getTeachers() {
 		// Assuming allEvents is an array containing event objects with 'username' property
 		allEvents.forEach((element, index) => {
 			let item = document.createElement("div");
+			let joined = formatDate(element.joined);
+
 			item.innerHTML = `
             <div class="uk-card uk-card-default uk-card-small">
 						
@@ -33,7 +35,7 @@ async function getTeachers() {
 													</div>
 													<div class="uk-width-expand">
 														<h6 class="uk-margin-remove-bottom uk-text-bold">${element.username}</h6>
-														<p class="uk-text-meta uk-margin-remove-top uk-text-small"><span class="text-warning">Joined: </span> ${element.joined}</p>
+														<p class="uk-text-meta uk-margin-remove-top uk-text-small"><span class="text-warning">Joined: </span> ${joined}</p>
 													</div>
 												</div>
 											</div>
@@ -53,14 +55,14 @@ async function getTeachers() {
                                                         <li><div
                                                         class="uk-width-expand uk-text-right panel-icons"
                                                     >
-                                                    <form id="deleteForm" action="/teachers/delete/${element._id}" method="post">
+                                                    <form id="${element._id}" action="/teachers/delete/${element._id}" method="post">
                                                     <button
                                                         type="button"
                                                         class="uk-icon-link"
                                                         title="Delete Teacher"
                                                         data-uk-tooltip
                                                         data-uk-icon="icon: trash"
-                                                        onclick="confirmDelete()"
+                                                        onclick="confirmDelete('${element._id}')"
                                                     ></button>
                                                 </form>
                                                     </div></li>
@@ -83,7 +85,7 @@ async function getTeachers() {
 }
 getTeachers();
 
-function confirmDelete() {
+function confirmDelete(id) {
 	Swal.fire({
 		title: "Are you sure?",
 		text: "You won't be able to revert this!",
@@ -95,7 +97,27 @@ function confirmDelete() {
 		cancelButtonColor: "#d33",
 	}).then((result) => {
 		if (result.isConfirmed) {
-			document.getElementById("deleteForm").submit();
+			document.getElementById(id).submit();
 		}
 	});
+}
+
+function formatDate(dateString) {
+	// Create a new Date object from the input date string
+	const date = new Date(dateString);
+
+	// Extract day, month, and year from the date object
+	const day = date.getUTCDate();
+	const month = date.getUTCMonth() + 1; // Months are zero-based, so add 1
+	const year = date.getUTCFullYear();
+
+	// Format day and month to be two digits
+	const formattedDay = day < 10 ? "0" + day : day;
+	const formattedMonth = month < 10 ? "0" + month : month;
+
+	// Format year to be in yy format
+	const formattedYear = year.toString().slice(-2);
+
+	// Return the formatted date string in dd/mm/yy format
+	return `${formattedDay}/${formattedMonth}/${formattedYear}`;
 }

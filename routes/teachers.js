@@ -5,8 +5,7 @@ const router = express.Router();
 router.get("/teachersList", (req, res) => {
 	try {
 		if (req.isAuthenticated()) {
-			console.log(req);
-			if (req.user.userType === "Admin") {
+			if (req.session.passport.user.type === "Admin") {
 				res.render("teachersControl");
 			} else {
 				res.redirect("/login");

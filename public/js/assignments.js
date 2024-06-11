@@ -104,7 +104,7 @@ async function getAssignments() {
 		allAssignments.forEach((assignment) => {
 			let assignmentId = assignment._id;
 			let card = document.createElement("div");
-			const formattedDate = formatDateString(assignment.createdAt);
+			const formattedDate = formatDate(assignment.createdAt);
 
 			card.classList.add("nature-card");
 			card.innerHTML = `
@@ -158,7 +158,7 @@ async function getAssignments() {
 					
 				  </div>
 				  <div class="uk-width-auto uk-text-right">
-				  <form id="deleteForm" action="/assignments/delete/${assignmentId}" method="post">
+				  <form id="${assignmentId}" action="/assignments/delete/${assignmentId}" method="post">
 				  <input type="hidden" name="filePath" value="${assignment.filePath}">
 				  
 				  <button
@@ -167,7 +167,7 @@ async function getAssignments() {
 					  title="Delete Assignment"
 					  data-uk-tooltip
 					  data-uk-icon="icon: trash"
-					  onclick="confirmDelete()"
+					  onclick="confirmDelete('${assignmentId}')"
 				  ></button>
 			  </form>
 				 
@@ -188,7 +188,7 @@ async function getAssignments() {
 
 getAssignments();
 
-function confirmDelete() {
+function confirmDelete(id) {
 	Swal.fire({
 		title: "Are you sure?",
 		text: "You won't be able to revert this!",
@@ -199,22 +199,27 @@ function confirmDelete() {
 		cancelButtonColor: "#d33",
 	}).then((result) => {
 		if (result.isConfirmed) {
-			document.getElementById("deleteForm").submit();
+			document.getElementById(id).submit();
 		}
 	});
 }
 
-function formatDateString(isoDateString) {
-	// Parse the date string to a Date object
-	const date = new Date(isoDateString);
+function formatDate(dateString) {
+	// Create a new Date object from the input date string
+	const date = new Date(dateString);
 
-	// Get the day, month, and year
+	// Extract day, month, and year from the date object
 	const day = date.getUTCDate();
-	const month = date.toLocaleString("default", { month: "long" }); // Using 'default' to get the full month name
+	const month = date.getUTCMonth() + 1; // Months are zero-based, so add 1
 	const year = date.getUTCFullYear();
 
-	// Format the date as "3, June, 2024"
-	return `${day}, ${month}, ${year}`;
-}
+	// Format day and month to be two digits
+	const formattedDay = day < 10 ? "0" + day : day;
+	const formattedMonth = month < 10 ? "0" + month : month;
 
-// Example usage
+	// Format year to be in yy format
+	const formattedYear = year.toString().slice(-2);
+
+	// Return the formatted date string in dd/mm/yy format
+	return `${formattedDay}/${formattedMonth}/${formattedYear}`;
+}

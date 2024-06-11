@@ -27,6 +27,7 @@ app.use(
 
 const eventsRoutes = require("./routes/events");
 const teachersRoutes = require("./routes/teachers");
+
 // Passport Configuration
 
 app.use(passport.initialize());
@@ -34,16 +35,11 @@ app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/SMS");
 
+//IMPORTING ALL MONGOOSE MODELS
 const Assignment = require("./models/assignmentModel");
 const Class = require("./models/classModel");
-
-const newClass = new Class({
-	className: "Grade 6",
-	classCode: "Grade 6",
-	classTeacher: "doctor@kmckenya.co.ke",
-});
-
-// newClass.save();
+const Student = require("./models/studentModel");
+const Teacher = require("./models/teacherModel");
 
 // ADMIN SCHEMA DETAILS
 const adminSchema = new mongoose.Schema({
@@ -59,30 +55,27 @@ const Admin = new mongoose.model("Admin", adminSchema);
 passport.use("admin-local", Admin.createStrategy());
 
 // STUDENT SCHEMA DETAILS
-const studentSchema = new mongoose.Schema({
-	email: String,
-	password: String,
-	joined: String,
-	secret: String,
-});
+// const studentSchema = new mongoose.Schema({
+// 	email: String,
+// 	password: String,
+// 	joined: String,
+// 	secret: String,
+// });
 
-studentSchema.plugin(passportLocalMongoose);
-
-const Student = new mongoose.model("Student", studentSchema);
-passport.use("student-local", Student.createStrategy());
+// passport.use("student-local", Student.createStrategy());
 
 //TEACHER SCHEMA DETAILS
-const teacherSchema = new mongoose.Schema({
-	email: String,
-	password: String,
-	joined: String,
-	secret: String,
-});
+// const teacherSchema = new mongoose.Schema({
+// 	email: String,
+// 	password: String,
+// 	joined: String,
+// 	secret: String,
+// });
 
-teacherSchema.plugin(passportLocalMongoose);
+// teacherSchema.plugin(passportLocalMongoose);
 
-const Teacher = new mongoose.model("Teacher", teacherSchema);
-passport.use("teacher-local", Teacher.createStrategy());
+// const Teacher = new mongoose.model("Teacher", teacherSchema);
+// passport.use("teacher-local", Teacher.createStrategy());
 
 // SERIALIZE AND DESERIALIZE
 passport.serializeUser((user, done) => {
@@ -129,36 +122,60 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/dashboard", async (req, res) => {
-	// console.log(req.user);
-	// console.log(req.session.passport.user.type);
+	try {
+		if (req.isAuthenticated()) {
+			let dashType = req.session.passport.user.type;
+			let numbers = await Numbers();
+			let classes = await Class.find();
+			let allTeachers = await Teacher.find();
+			let studentFoundClass;
+			let classAssignmentsGiven;
+			if (dashType === "Student") {
+				let studentClass = await Student.findById(req.session.passport.user.id);
+				studentFoundClass = studentClass.class;
+				classAssignmentsGiven = await Assignment.find({
+					AsClass: studentFoundClass,
+				});
+			} else {
+				studentFoundClass = null;
+			}
 
-	if (req.isAuthenticated()) {
-		let dashType = req.session.passport.user.type;
-		let numbers = await Numbers();
-		let data = {
-			userName: req.user.username,
-			userId: req.user._id,
-			userType: dashType,
-			numbers: numbers,
-		};
-		// TODO MAKE DIFFERENT USER_DATA DEPENDING ON THE TYPE OF USER
-		if (dashType === "Admin") {
-			// console.log("Admin Accessed");
-			res.render("dashboardAdmin", data);
-		} else if (dashType === "Student") {
-			// console.log("Students Accessed");
-			res.render("dashboardStudent", data);
-		} else if (dashType === "Teacher") {
-			// console.log("Teachers Accessed");
-			res.render("dashboardTeacher", data);
+			let data = {
+				userName: req.user.username,
+				userId: req.user._id,
+				userType: dashType,
+				numbers: numbers,
+				classes: classes,
+				allTeachers: allTeachers,
+				studentClass: studentFoundClass,
+				classAssignments: [],
+			};
+			if (classAssignmentsGiven) {
+				classAssignmentsGiven.forEach((assignment) => {
+					data.classAssignments.push(assignment);
+				});
+			}
+
+			// console.log(classAssignmentsGiven);
+			switch (dashType) {
+				case "Admin":
+					res.render("dashboardAdmin", data);
+					break;
+				case "Student":
+					res.render("dashboardStudent", data);
+					break;
+				case "Teacher":
+					res.render("dashboardTeacher", data);
+					break;
+				default:
+					res.status(403).send("You do not have access to this page");
+			}
 		} else {
-			res.send("You are not the admin");
+			res.redirect("/login");
 		}
-		// console.log("Secrets accessed");
-		// // const allUsersWithSecrets = await User.find({ secret: { $ne: null } });
-		// res.render("dashboardAdmin");
-	} else {
-		res.redirect("/login");
+	} catch (error) {
+		console.error("Error accessing the dashboard:", error);
+		res.status(500).send("Internal Server Error");
 	}
 });
 
@@ -562,6 +579,17 @@ app.post("/assignments/delete/:id", async (req, res) => {
 	}
 });
 
+// 4. Getting all assignments for a particular class
+app.get("/assignments/get/:class", async (req, res) => {
+	try {
+		const className = req.params.class;
+		const assignments = await Assignment.find({ AsClass: className });
+		res.status(200).json(assignments);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
 function deleteFile(filePath) {
 	return new Promise((resolve) => {
 		fs.unlink(filePath, (err) => {
@@ -596,3 +624,144 @@ async function Numbers() {
 		classNumbers: classNumbers,
 	};
 }
+
+// CLASSES
+// TODO 1. Make a route to get all the classes
+
+// Route to get all classes
+app.get("/classes", async (req, res) => {
+	try {
+		if (req.isAuthenticated()) {
+			const classes = await Class.find();
+			res.json(classes);
+		} else {
+			res.redirect("/login");
+		}
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
+// Route to create a new class
+app.post("/classes", async (req, res) => {
+	try {
+		const { className, classCode, classTeacher } = req.body;
+
+		// Create a new class
+		const newClass = new Class({
+			className: className,
+			classCode: className,
+			classTeacher: classTeacher,
+		});
+
+		// Save the class to the database
+		const savedClass = await newClass.save();
+
+		// Send a response back to the client
+		// res.status(201).json(savedClass);
+		res.redirect("/dashboard");
+	} catch (error) {
+		// Handle errors
+		console.error("Error creating class:", error);
+		res
+			.status(500)
+			.json({ message: "Error creating class", error: error.message });
+	}
+});
+// Route to get a specific class by ID
+app.get("/classes/:id", async (req, res) => {
+	try {
+		if (req.isAuthenticated()) {
+			const classItem = await Class.findById(req.params.id);
+			if (!classItem)
+				return res.status(404).json({ message: "Class not found" });
+			res.json(classItem);
+		} else {
+			res.redirect("/login");
+		}
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
+// Route to delete a specific class by ID
+app.post("/classes/delete/:id", async (req, res) => {
+	try {
+		if (req.isAuthenticated()) {
+			const classItem = await Class.findById(req.params.id);
+
+			if (!classItem) {
+				return res.status(404).json({ message: "Class not found" });
+			}
+
+			await Class.findByIdAndDelete(req.params.id); // Using findByIdAndDelete for direct deletion
+
+			res.redirect("/dashboard");
+		} else {
+			req.redirect("/login");
+		}
+	} catch (err) {
+		console.error("Error deleting class:", err); // Log the error for debugging
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+});
+
+// Route to update a specific detail of a class by ID
+app.patch("/classes/:id", async (req, res) => {
+	try {
+		const classItem = await Class.findById(req.params.id);
+		if (!classItem) return res.status(404).json({ message: "Class not found" });
+
+		// Update class with the fields provided in the request body
+		Object.keys(req.body).forEach((key) => {
+			classItem[key] = req.body[key];
+		});
+
+		await classItem.save();
+		res.json(classItem);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
+// Function to increment the number of members in the class by one
+app.post("/classes/:id/increment-members", async (req, res) => {
+	try {
+		const classItem = await Class.findById(req.params.id);
+		if (!classItem) return res.status(404).json({ message: "Class not found" });
+
+		classItem.members += 1;
+		await classItem.save();
+		res.json(classItem);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
+// STUDENTS
+// Route to update the class of a student
+app.post("/students/:id/class", async (req, res) => {
+	if (req.isAuthenticated()) {
+		const studentId = req.params.id;
+		const newClass = req.body.newClass;
+
+		try {
+			const student = await Student.findByIdAndUpdate(
+				studentId,
+				{ class: newClass },
+				{ new: true }
+			);
+
+			if (!student) {
+				return res.status(404).json({ message: "Student not found" });
+			}
+
+			res.json(student);
+			res.redirect("/dashboard");
+		} catch (err) {
+			res.status(500).json({ message: err.message });
+		}
+	} else {
+		res.redirect("/login");
+	}
+});
