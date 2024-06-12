@@ -23,6 +23,12 @@ const adminSchema = new mongoose.Schema(
 		},
 	},
 	{
-		timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
+		timestamps: true,
 	}
 );
+
+adminSchema.plugin(passportLocalMongoose);
+const Admin = new mongoose.model("Admin", adminSchema);
+passport.use("admin-local", Admin.createStrategy());
+
+module.exports = Admin;

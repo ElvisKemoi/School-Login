@@ -10,6 +10,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const _ = require("lodash");
 
 const app = express();
 app.use(express.static("public"));
@@ -40,19 +41,20 @@ const Assignment = require("./models/assignmentModel");
 const Class = require("./models/classModel");
 const Student = require("./models/studentModel");
 const Teacher = require("./models/teacherModel");
+const Admin = require("./models/adminModel");
 
 // ADMIN SCHEMA DETAILS
-const adminSchema = new mongoose.Schema({
-	email: String,
-	password: String,
-	joined: String,
-	secret: String,
-});
+// const adminSchema = new mongoose.Schema({
+// 	email: String,
+// 	password: String,
+// 	joined: String,
+// 	secret: String,
+// });
 
-adminSchema.plugin(passportLocalMongoose);
+// adminSchema.plugin(passportLocalMongoose);
 
-const Admin = new mongoose.model("Admin", adminSchema);
-passport.use("admin-local", Admin.createStrategy());
+// const Admin = new mongoose.model("Admin", adminSchema);
+// passport.use("admin-local", Admin.createStrategy());
 
 // STUDENT SCHEMA DETAILS
 // const studentSchema = new mongoose.Schema({
@@ -204,9 +206,11 @@ app.post("/register", (req, res) => {
 	} else {
 		return res.status(400).send("Invalid user type");
 	}
+	const lowerUsername = _.lowerCase(req.body.username);
+	console.log("lowerUsername " + lowerUsername);
 
 	UserModel.register(
-		{ username: req.body.username, joined: getCurrentDate() },
+		{ username: lowerUsername, joined: getCurrentDate() },
 		req.body.password,
 		(err, user) => {
 			if (err) {
@@ -238,9 +242,10 @@ app.post("/login", async (req, res) => {
 	} else {
 		return res.status(400).send("Invalid user type");
 	}
+	const userNameLower = _.lowerCase(req.body.username);
 
 	const user = new UserModel({
-		username: req.body.username,
+		username: userNameLower,
 		password: req.body.password,
 	});
 
@@ -764,7 +769,7 @@ app.post("/classes/:id/increment-members", async (req, res) => {
 app.post("/students/:id/class", async (req, res) => {
 	if (req.isAuthenticated()) {
 		const studentId = req.params.id;
-		const newClass = req.body.newClass;
+		const newClass = await req.body.newClass;
 
 		try {
 			const student = await Student.findByIdAndUpdate(
@@ -775,10 +780,11 @@ app.post("/students/:id/class", async (req, res) => {
 
 			if (!student) {
 				return res.status(404).json({ message: "Student not found" });
+			} else if (student.class === newClass) {
+				res.redirect("/dashboard");
+			} else {
+				throw Error("Class not updated");
 			}
-
-			res.json(student);
-			res.redirect("/dashboard");
 		} catch (err) {
 			res.status(500).json({ message: err.message });
 		}
