@@ -590,6 +590,27 @@ app.get("/assignments/get/:class", async (req, res) => {
 	}
 });
 
+// 5. Downloading assignments
+app.get("/assignments/download/:id", async (req, res) => {
+	try {
+		const assignment = await Assignment.findById(req.params.id);
+		if (!assignment) {
+			return res.status(404).json({ error: "Assignment not found" });
+		}
+
+		const filePath = path.resolve(__dirname, assignment.filePath);
+		res.download(filePath, (err) => {
+			if (err) {
+				console.error("Error downloading file", err);
+				return res.status(500).json({ error: "Error downloading file" });
+			}
+		});
+	} catch (err) {
+		console.error("Error fetching assignment", err);
+		res.status(500).json({ error: "Server error" });
+	}
+});
+
 function deleteFile(filePath) {
 	return new Promise((resolve) => {
 		fs.unlink(filePath, (err) => {
