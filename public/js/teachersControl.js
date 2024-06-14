@@ -16,7 +16,7 @@ async function getTeachers() {
 		// Assuming allEvents is an array containing event objects with 'username' property
 		allEvents.forEach((element, index) => {
 			let item = document.createElement("div");
-			let joined = formatDate(element.joined);
+			let joined = formatDate(element.createdAt);
 
 			item.innerHTML = `
             <div class="uk-card uk-card-default uk-card-small">
