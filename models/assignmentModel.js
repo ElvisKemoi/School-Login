@@ -10,7 +10,7 @@ const assignmentSchema = new mongoose.Schema(
 
 			required: true,
 		},
-		createdAt: { type: Date, default: Date.now },
+
 		subject: { type: String, required: true },
 		AsClass: { type: String, required: true },
 	},

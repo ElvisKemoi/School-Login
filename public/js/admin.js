@@ -109,6 +109,7 @@ function formatDate(dateString) {
 // Classes
 
 const homeClassCards = document.getElementById("homeClassCards");
+homeClassCards.classList.add("invisible");
 homeClassCards.innerHTML = "";
 
 async function getClasses() {
@@ -177,6 +178,7 @@ async function getClasses() {
 			`;
 			homeClassCards.appendChild(classCard);
 		});
+		homeClassCards.classList.remove("invisible");
 
 		// Process the events data as needed
 	} catch (error) {
