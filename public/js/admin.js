@@ -126,8 +126,7 @@ async function getClasses() {
 
 		allClasses.forEach((clas) => {
 			const classCard = document.createElement("div");
-			const created = clas.created;
-			const localTimeString = new Date(created).toLocaleDateString();
+			const localTimeString = new Date(clas.createdAt).toLocaleDateString();
 			classCard.innerHTML = `
 			<div class="uk-card uk-card-small uk-card-default">
 			<div class="uk-card-header">
@@ -154,12 +153,12 @@ async function getClasses() {
 					>
 						${clas.members} Members  
 					</div>
-					<div class="uk-width-auto uk-text-right">
+<!-- <div class="uk-width-auto uk-text-right">
 						<a href="#" data-uk-tooltip="title: Twitter" class="uk-icon-link" data-uk-icon="icon:twitter; ratio: 0.8"></a>
 						<a href="#" data-uk-tooltip="title: Instagram" class="uk-icon-link" data-uk-icon="icon:instagram; ratio: 0.8"></a>
 						<a href="#" data-uk-tooltip="title: Behance" class="uk-icon-link" data-uk-icon="icon:behance; ratio: 0.8"></a>
 						<a href="#" data-uk-tooltip="title: Pinterest" class="uk-icon-link" data-uk-icon="icon:pinterest; ratio: 0.8"></a>
-					</div>
+					</div> -->
 					<div class="uk-width-auto uk-text-right">
 					<form id="${clas._id}" action="/classes/delete/${clas._id}" method="post">
 					<button

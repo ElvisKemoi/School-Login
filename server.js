@@ -2,15 +2,9 @@ require("dotenv").config();
 require("ejs");
 const express = require("express");
 const bodyParser = require("body-parser");
-// const exp = require("constants");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
-// const passportLocalMongoose = require("passport-local-mongoose");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
 const { Numbers, countMembers } = require("./functions/functions");
 
 const app = express();
@@ -24,19 +18,16 @@ app.use(
 		secret: "Our little secret.",
 		resave: false,
 		saveUninitialized: false,
+		cookie: {
+			maxAge: 30 * 60 * 1000,
+		},
 	})
 );
 
-// IMPORTING ROUTES
-const eventsRoutes = require("./routes/events");
-const teachersRoutes = require("./routes/teachers");
-const assignmentRoutes = require("./routes/assignmentRoute");
-const classRoutes = require("./routes/classRoutes");
-const studentRoutes = require("./routes/studentRoutes");
-
+// DATABASE CONNECTION
 mongoose.connect("mongodb://localhost:27017/SMS");
 
-// Passport Configuration
+// PASSPORT CONFIGURATION
 const passportConfig = require("./passportConfig");
 passportConfig(app);
 
@@ -46,6 +37,13 @@ const Class = require("./models/classModel");
 const Student = require("./models/studentModel");
 const Teacher = require("./models/teacherModel");
 const Admin = require("./models/adminModel");
+
+// IMPORTING ROUTES
+const eventsRoutes = require("./routes/events");
+const teachersRoutes = require("./routes/teachers");
+const assignmentRoutes = require("./routes/assignmentRoute");
+const classRoutes = require("./routes/classRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 app.use("/", teachersRoutes);
 app.use("/", eventsRoutes);
 app.use("/", assignmentRoutes);
@@ -57,7 +55,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-	res.render("login-dark");
+	res.render("login");
 });
 
 app.get("/register", (req, res) => {
@@ -67,7 +65,7 @@ app.get("/register", (req, res) => {
 app.get("/dashboard", async (req, res) => {
 	try {
 		if (req.isAuthenticated()) {
-			countMembers();
+			await countMembers();
 
 			let dashType = req.session.passport.user.type;
 			let numbers = await Numbers();
@@ -86,14 +84,14 @@ app.get("/dashboard", async (req, res) => {
 			}
 
 			let data = {
-				userName: req.user.username,
-				userId: req.user._id,
-				userType: dashType,
-				numbers: numbers,
-				classes: classes,
-				allTeachers: allTeachers,
-				studentClass: studentFoundClass,
-				classAssignments: [],
+				userName: req.user.username, // ALL
+				userId: req.user._id, //ALL
+				userType: dashType, // ALL
+				numbers: numbers, // ADMIN
+				classes: classes, // ADMIN
+				allTeachers: allTeachers, // ADMIN
+				studentClass: studentFoundClass, // STUDENTS
+				classAssignments: [], // STUDENTS
 			};
 			if (classAssignmentsGiven) {
 				classAssignmentsGiven.forEach((assignment) => {
@@ -149,10 +147,8 @@ app.post("/register", (req, res) => {
 	} else {
 		return res.status(400).send("Invalid user type");
 	}
-	const lowerUsername = req.body.username;
-
 	UserModel.register(
-		{ username: lowerUsername },
+		{ username: req.body.username },
 		req.body.password,
 		(err, user) => {
 			if (err) {
@@ -184,10 +180,9 @@ app.post("/login", async (req, res) => {
 	} else {
 		return res.status(400).send("Invalid user type");
 	}
-	const userNameLower = req.body.username;
 
 	const user = new UserModel({
-		username: userNameLower,
+		username: req.body.username,
 		password: req.body.password,
 	});
 

@@ -41,7 +41,7 @@ async function Numbers() {
 	};
 }
 // FUNCTION TO UPDATE THE MEMBER COUNT
-// TODO 1. GET ALL CLASSES THAT ARE AVAILABLE IN THE DB
+//  GET ALL CLASSES THAT ARE AVAILABLE IN THE DB
 async function getClasses() {
 	const availableClasses = await Class.find(
 		{},
@@ -54,7 +54,7 @@ async function getClasses() {
 	return classArr;
 }
 
-// TODO 2. FOR EACH CLASS, COUNT THE STUDENTS WHO HAVE THE CLASS
+// FOR EACH CLASS, COUNT THE STUDENTS WHO HAVE THE CLASS
 async function countMembers() {
 	const allClasses = await getClasses(); // Await the getClasses function
 
@@ -65,7 +65,7 @@ async function countMembers() {
 		})
 	);
 
-	// TODO 3. UPDATE THE CLASS MEMBERS.
+	//  UPDATE THE CLASS MEMBERS.
 	await updateClassMembers(numbers);
 }
 

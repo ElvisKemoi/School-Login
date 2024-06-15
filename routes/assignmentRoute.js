@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Assignment = require("../models/assignmentModel");
 const Class = require("../models/classModel");
-// const { upload } = require("../functions/functions");
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs");
 
 // Assignments
 const storage = multer.diskStorage({
@@ -33,6 +33,20 @@ const upload = multer({
 		}
 	},
 });
+
+function deleteFile(filePath) {
+	return new Promise((resolve) => {
+		fs.unlink(filePath, (err) => {
+			if (err) {
+				console.error("Error removing file:", err);
+				resolve(false);
+			} else {
+				console.log("File removed successfully");
+				resolve(true);
+			}
+		});
+	});
+}
 
 router.get("/assignments", async (req, res) => {
 	if (req.isAuthenticated()) {
