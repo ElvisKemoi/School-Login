@@ -5,6 +5,7 @@ const Class = require("../models/classModel");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
+const { combineDateTime } = require("../functions/functions");
 
 // Assignments
 const storage = multer.diskStorage({
@@ -52,7 +53,7 @@ router.get("/assignments", async (req, res) => {
 	if (req.isAuthenticated()) {
 		try {
 			const allClasses = await Class.find();
-			res.render("album", { classes: allClasses });
+			res.render("assignmentsPanel", { classes: allClasses });
 		} catch (err) {
 			console.error(err);
 			res.status(500).send("Internal Server Error");
@@ -74,6 +75,9 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 			const description = data.description;
 			const subject = data.subject;
 			const asClass = data.AsClass;
+			const deadlineDate = data.deadlineDate;
+			const deadlineTime = data.deadlineTime;
+			const deadline = combineDateTime(deadlineDate, deadlineTime);
 
 			const newAssignment = new Assignment({
 				title: name,
@@ -82,6 +86,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 				createdBy: creator,
 				subject: subject,
 				AsClass: asClass,
+				deadline: deadline,
 			});
 
 			const saveStatus = await newAssignment.save();

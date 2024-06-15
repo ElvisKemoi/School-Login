@@ -201,24 +201,6 @@
 		<!-- /CONTENT -->
 		<!--FOOTER-->
 		<%- include("./partials/footer.ejs") -%>
-
-		<!-- <footer class="uk-section uk-section-default uk-section-small">
-			<div class="uk-container">
-				<p class="uk-text-small uk-text-center">
-					Copyright 2017 - Lorem ipsum dolor sit amet.
-					<a href="https://github.com/zzseba78/Kick-Off">Created by KickOff</a>
-					| Built with
-					<a
-						href="http://getuikit.com"
-						title="Visit UIkit 3 site"
-						target="_blank"
-						data-uk-tooltip
-						><span data-uk-icon="uikit"></span
-					></a>
-				</p>
-			</div>
-		</footer> -->
-		<!--/FOOTER-->
 		<!-- OFFCANVAS -->
 		<div id="offcanvas-nav" data-uk-offcanvas="flip: true; overlay: true">
 			<div
@@ -344,7 +326,7 @@
 							id="instructions"
 							rows="3"
 							name="Instructions"
-							placeholder="(optional)"
+							required
 						></textarea>
 					</div>
 					<div class="mb-3">
@@ -362,13 +344,28 @@
 							<% }); %>
 						</select>
 					</div>
+					<div class="mb-3">
+						<label for="deadlineDate"> Set Deadline: </label>
 
-					<!-- <input
-						type="file"
-						id="fileInput"
-						name="file"
-						accept=".txt,.pdf,.doc,.docx"
-					/> -->
+						<input
+							type="date"
+							name="deadlineDate"
+							id="deadlineDate"
+							class="form-control"
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="deadlineTime" class="form-label">
+							Set DeadlineTime:
+						</label>
+						<input
+							type="time"
+							class="form-control"
+							name="deadlineTime"
+							id="deadlineTime"
+						/>
+					</div>
+
 					<button
 						type="button"
 						class="btn w-100 btn-primary"

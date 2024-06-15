@@ -13,6 +13,7 @@ const assignmentSchema = new mongoose.Schema(
 
 		subject: { type: String, required: true },
 		AsClass: { type: String, required: true },
+		deadline: { type: Date, required: false },
 	},
 	{
 		timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields

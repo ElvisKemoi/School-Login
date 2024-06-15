@@ -36,10 +36,14 @@ async function uploadFile() {
 	const subject = document.getElementById("subject");
 	const description = document.getElementById("instructions");
 	const asClass = document.getElementById("AsClass");
+	const deadlineDate = document.getElementById("deadlineDate");
+	const deadlineTime = document.getElementById("deadlineTime");
 	const more = {
 		subject: subject.value,
 		description: description.value,
 		AsClass: asClass.value,
+		deadlineDate: deadlineDate.value,
+		deadlineTime: deadlineTime.value,
 	};
 
 	formData.append("file", file);
@@ -105,6 +109,7 @@ async function getAssignments() {
 			let assignmentId = assignment._id;
 			let card = document.createElement("div");
 			const formattedDate = formatDate(assignment.createdAt);
+			const deadline = formatDate(assignment.deadline);
 
 			card.classList.add("nature-card");
 			card.innerHTML = `
@@ -154,7 +159,8 @@ async function getAssignments() {
 					<a href="#" data-uk-tooltip="title: Instagram" class="uk-icon-link" data-uk-icon="icon:instagram; ratio: 0.8"></a>
 					<a href="#" data-uk-tooltip="title: Behance" class="uk-icon-link" data-uk-icon="icon:behance; ratio: 0.8"></a>
 					<a href="#" data-uk-tooltip="title: Pinterest" class="uk-icon-link" data-uk-icon="icon:pinterest; ratio: 0.8"></a>-->
-					<span data-uk-icon="icon:clock; ratio: 0.8"></span>2 days left
+					<div data-uk-tooltip="title: Deadline" >
+					<span data-uk-icon="icon:clock; ratio: 0.8"></span> ${deadline} </div>
 					
 				  </div>
 				  <div class="uk-width-auto uk-text-right">

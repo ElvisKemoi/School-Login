@@ -84,4 +84,18 @@ async function updateClassMembers(classCounts) {
 	}
 }
 
-module.exports = { deleteFile, Numbers, countMembers };
+function combineDateTime(deadlineDate, deadlineTime) {
+	// Parse the input date and time
+	let datePart = new Date(deadlineDate);
+	let timeParts = deadlineTime.split(":");
+
+	// Set the hours and minutes from the time string
+	datePart.setUTCHours(timeParts[0], timeParts[1], 0, 0);
+
+	// Format the combined datetime as ISO string
+	let combinedDateTime = datePart.toISOString();
+
+	return combinedDateTime;
+}
+
+module.exports = { deleteFile, Numbers, countMembers, combineDateTime };
