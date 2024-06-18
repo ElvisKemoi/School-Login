@@ -12,14 +12,16 @@ const teacherSchema = new mongoose.Schema(
 		},
 		password: {
 			type: String,
+			required: false,
 		},
+		subjectsTaught: { type: [String], required: false, default: [] },
 
 		secret: {
 			type: String,
 		},
 	},
 	{
-		timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
+		timestamps: true,
 	}
 );
 

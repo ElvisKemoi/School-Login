@@ -8,7 +8,6 @@
 		<!-- TODO ADD FAVICON -->
 		<link rel="icon" href="img/favicon.ico" />
 
-
 		<link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 			rel="stylesheet"
@@ -44,58 +43,6 @@
 						</div>
 						<ul class="uk-navbar-nav uk-visible@m">
 							<li><a href="#">Accounts</a></li>
-							<li>
-								<a href="#"
-									>Settings <span data-uk-icon="icon: triangle-down"></span
-								></a>
-								<div class="uk-navbar-dropdown">
-									<ul class="uk-nav uk-navbar-dropdown-nav">
-										<li class="uk-nav-header">YOUR ACCOUNT</li>
-										<li>
-											<a href="#"
-												><span data-uk-icon="icon: info"></span> Summary</a
-											>
-										</li>
-										<li>
-											<a href="#"
-												><span data-uk-icon="icon: refresh"></span> Edit</a
-											>
-										</li>
-										<li>
-											<a href="#"
-												><span data-uk-icon="icon: settings"></span>
-												Configuration</a
-											>
-										</li>
-										<li class="uk-nav-divider"></li>
-										<form
-											id="deleteForm"
-											action="/teachers/delete/<%= userId%>"
-											method="post"
-										>
-										<li>
-												<button
-													type="button"
-													class="uk-icon-link text-dark"
-													title="Delete Your Account"
-													data-uk-tooltip
-													data-uk-icon="icon: trash"
-													onclick="confirmDelete()"
-												>
-												
-												 Delete Your Account
-												</button>
-											</form>
-										</li>
-										<li class="uk-nav-divider"></li>
-										<li>
-											<a href="/logout"
-												><span data-uk-icon="icon: sign-out"></span> Logout</a
-											>
-										</li>
-									</ul>
-								</div>
-							</li>
 						</ul>
 						<div class="uk-navbar-item uk-visible@s">
 							<form action="dashboard.html" class="uk-search uk-search-default">
@@ -427,9 +374,45 @@
 								required
 							/>
 						</div>
-						
+
 						<button type="submit" class="btn btn-primary btn-block">
 							Change Password
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div id="modal-center1" class="uk-flex-top" data-uk-modal>
+			<div
+				class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical card rounded"
+			>
+				<button
+					class="uk-modal-close-default"
+					type="button"
+					data-uk-close
+				></button>
+
+				<div class="container form-container">
+					<h2 class="text-center">Add Subject</h2>
+					<form
+						id="changePasswordForm"
+						method="post"
+						action="/teachers/<%= user._id%>/subjects"
+					>
+						<div class="form-group">
+							<label for="newSubject">New Subject</label>
+							<input
+								type="text"
+								class="form-control"
+								id="newSubject"
+								name="newSubject"
+								placeholder="Enter new Subject"
+								required
+							/>
+						</div>
+
+						<button type="submit" class="btn btn-primary btn-block">
+							Add Subject
 						</button>
 					</form>
 				</div>
@@ -445,38 +428,104 @@
 					<div>
 						<span class="uk-text-small"
 							><span
-								data-uk-icon="icon:users"
+								data-uk-icon="icon:album"
 								class="uk-margin-small-right uk-text-primary"
 							></span
-							>New Users</span
+							>Assignments</span
 						>
 						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
-							2.134
+							<%= assignments.length %>
 						</h1>
 						<div class="uk-text-small">
-							<span class="uk-text-success" data-uk-icon="icon: triangle-up"
-								>15%</span
+							<a
+								class="uk-text-success"
+								data-uk-icon="icon: plus"
+								href="/assignments"
 							>
-							more than last week.
+								Add an Assignment
+							</a>
 						</div>
 					</div>
+
 					<div>
 						<span class="uk-text-small"
 							><span
 								data-uk-icon="icon:social"
 								class="uk-margin-small-right uk-text-primary"
 							></span
-							>Social Media</span
+							>My Subjects</span
 						>
+
 						<h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
-							8.490
+							<%= user.subjectsTaught.length %>
 						</h1>
-						<div class="uk-text-small">
-							<span class="uk-text-warning" data-uk-icon="icon: triangle-down"
-								>-15%</span
+						<div class="uk-position-relative uk-text-center uk-display-block">
+							<a
+								href="#"
+								class="uk-text-small uk-text-muted uk-display-block uk-text-center"
+								data-uk-icon="icon: triangle-down; ratio: 0.7"
+								>View Subjects
+							</a>
+							<!-- user dropdown -->
+							<div
+								class="uk-dropdown user-drop"
+								data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150"
 							>
-							less than last week.
+								<ul class="uk-nav uk-dropdown-nav uk-text-left">
+									<% user.subjectsTaught.forEach((subject, index)=>{ %>
+									<li class="d-flex flex-row">
+										<a href="#">
+											<%= index+1 %>
+											<form
+												action="/teacher/<%= user._id %>/delete/subjects"
+												method="post"
+											>
+												<input
+													type="hidden"
+													name="subjectToDelete"
+													value="<%=subject %>"
+												/>
+												<button type="submit">
+													<span data-uk-icon="icon: trash"></span>
+												</button>
+											</form>
+
+											<span data-uk-icon="icon: info"></span>
+											<%= subject %>
+										</a>
+									</li>
+
+									<% })%> <% if (user.subjectsTaught.length === 0){ %>
+
+									<li>
+										<a href="#modal-center1" data-uk-toggle
+											><span
+												data-uk-icon="icon: plus"
+												class="uk-text-warning"
+											></span>
+											You have <%= user.subjectsTaught.length%> subjects.</a
+										>
+									</li>
+									<% } %>
+									<li class="uk-nav-divider"></li>
+
+									<li>
+										<a href="#modal-center1" data-uk-toggle
+											><span
+												data-uk-icon="icon: plus"
+												class="uk-text-success"
+											></span>
+											Add Subject</a
+										>
+									</li>
+								</ul>
+							</div>
+							<!-- /user dropdown -->
 						</div>
+						<!-- <div class="uk-text-small">
+							<a class="uk-text-success" data-uk-icon="icon: triangle-up"></a
+							>View Subjects
+						</div> -->
 					</div>
 					<div>
 						<span class="uk-text-small"
@@ -655,6 +704,137 @@
 				>
 					<!-- panel -->
 					<div class="uk-width-1-2@l">
+						<div class="uk-card">
+							<div class="uk-card-header">
+								<div class="uk-grid uk-grid-small">
+									<div class="uk-width-auto">
+										<h4>Assignments Given</h4>
+									</div>
+									<div class="uk-width-expand uk-text-right panel-icons">
+										<a
+											href="#"
+											class="uk-icon-link sortable-icon"
+											title="Move"
+											data-uk-tooltip
+											data-uk-icon="icon: move"
+										></a>
+										<a
+											href="/assignments"
+											class="uk-icon-link uk-text-success"
+											title="Add Assignment"
+											data-uk-tooltip
+											data-uk-icon="icon: plus"
+										></a>
+										<a
+											href="/assignments"
+											class="uk-icon-link"
+											title="Edit/Add"
+											data-uk-tooltip
+											data-uk-icon="icon: cog"
+										></a>
+										<a
+											href="/dashboard"
+											class="uk-icon-link uk-text-success"
+											title="Refresh"
+											data-uk-tooltip
+											data-uk-icon="icon: refresh"
+										></a>
+									</div>
+								</div>
+							</div>
+							<div>
+								<div
+									class="uk-child-width-1-3@m uk-grid-small uk-grid-match"
+									uk-grid
+								>
+									<% assignments.forEach(assignment=>{ %>
+
+									<div>
+										<!-- card -->
+										<div
+											class="nature-card"
+											data-tags="a beautiful landscape - nature outdoor"
+										>
+											<div class="uk-card uk-card-small uk-card-default">
+												<div class="uk-card-header">
+													<div
+														class="uk-grid uk-grid-small uk-text-small"
+														data-uk-grid
+													>
+														<div class="uk-width-expand">
+															<span
+																class="cat-txt"
+																data-uk-tooltip="title: Title"
+															>
+																<%= assignment.title %>
+															</span>
+														</div>
+														<div
+															data-uk-tooltip="title: Class"
+															class="uk-width-auto uk-text-right uk-text-muted"
+														>
+															<%= assignment.AsClass %>
+														</div>
+													</div>
+												</div>
+												<div class="uk-card-body">
+													<h6
+														class="uk-margin-small-bottom uk-margin-remove-adjacent uk-text-bold"
+													>
+														<%= assignment.title %>
+													</h6>
+													<p
+														class="uk-text-small uk-text-muted"
+														data-uk-tooltip="title: Details"
+													>
+														<%= assignment.description %>
+													</p>
+												</div>
+												<div class="uk-card-footer">
+													<div
+														class="uk-grid uk-grid-small uk-grid-divider uk-flex uk-flex-middle"
+														data-uk-grid
+													>
+														<div
+															class="uk-width-expand uk-text-small"
+															data-uk-tooltip="title: Created"
+														>
+															<%= formatDate(assignment.createdAt) %>
+														</div>
+														<div
+															class="uk-width-auto uk-text-right"
+															data-uk-tooltip="title: Deadline"
+														>
+															<span
+																class="uk-icon-link"
+																data-uk-icon="icon:clock; ratio: 0.8"
+															>
+															</span>
+															<%= formatDate(assignment.deadline) %>
+														</div>
+														<div class="uk-width-auto uk-text-right">
+															<a
+																href="/assignments"
+																class="uk-icon-link"
+																title="Edit"
+																data-uk-tooltip
+																data-uk-icon="icon: cog"
+															></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- /card -->
+									</div>
+									<% }) %>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /panel -->
+					<!-- panel -->
+					<div class="uk-width-1-2@l">
 						<div class="uk-card uk-card-default uk-card-small uk-card-hover">
 							<div class="uk-card-header">
 								<div class="uk-grid uk-grid-small">
@@ -763,76 +943,6 @@
 					<!-- /panel -->
 
 					<!-- Added Actions  -->
-					<!-- panel -->
-					<div class="uk-width-1-2@l">
-						<div class="uk-card">
-							<div class="uk-card-header">
-								<div class="uk-grid uk-grid-small">
-									<div class="uk-width-auto">
-										<h4>Cards Content</h4>
-									</div>
-									<div class="uk-width-expand uk-text-right panel-icons">
-										<a
-											href="#"
-											class="uk-icon-link sortable-icon"
-											title="Move"
-											data-uk-tooltip
-											data-uk-icon="icon: move"
-										></a>
-										<a
-											href="#"
-											class="uk-icon-link"
-											title="Configuration"
-											data-uk-tooltip
-											data-uk-icon="icon: cog"
-										></a>
-										<a
-											href="#"
-											class="uk-icon-link"
-											title="Close"
-											data-uk-tooltip
-											data-uk-icon="icon: close"
-										></a>
-									</div>
-								</div>
-							</div>
-							<div>
-								<div
-									class="uk-child-width-1-3@m uk-grid-small uk-grid-match"
-									uk-grid
-								>
-									<div>
-										<div class="uk-card uk-card-default uk-card-body">
-											<h3 class="uk-card-title">Default</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit.
-											</p>
-										</div>
-									</div>
-									<div>
-										<div class="uk-card uk-card-primary uk-card-body">
-											<h3 class="uk-card-title">Primary</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit.
-											</p>
-										</div>
-									</div>
-									<div>
-										<div class="uk-card uk-card-secondary uk-card-body">
-											<h3 class="uk-card-title">Secondary</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit.
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /panel -->
 
 					<!-- panel -->
 					<div class="uk-width-1-2@l">
@@ -1023,6 +1133,260 @@
 					type="button"
 					data-uk-close
 				></button>
+
+				<div class="left-logo uk-flex uk-flex-middle">
+					<div><h2 class="uk-nav-header">School Logo</h2></div>
+					<!-- <img class="custom-logo" src="img/dashboard-logo.svg" alt="" /> -->
+				</div>
+				<div class="left-content-box content-box-dark">
+					<img
+						src="img/avatar.svg"
+						alt=""
+						class="uk-border-circle profile-img"
+					/>
+					<h4 class="uk-text-center uk-margin-remove-vertical text-light">
+						<%= userName %>
+					</h4>
+
+					<div class="uk-position-relative uk-text-center uk-display-block">
+						<a
+							href="#"
+							class="uk-text-small uk-text-muted uk-display-block uk-text-center"
+							data-uk-icon="icon: triangle-down; ratio: 0.7"
+							><%= userType %>
+						</a>
+						<!-- user dropdown -->
+						<div
+							class="uk-dropdown user-drop"
+							data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150"
+						>
+							<ul class="uk-nav uk-dropdown-nav uk-text-left">
+								<li>
+									<a href="#"
+										><span data-uk-icon="icon: info"></span> Summary</a
+									>
+								</li>
+								<li>
+									<a href="#"
+										><span data-uk-icon="icon: refresh"></span> Edit</a
+									>
+								</li>
+								<li>
+									<a class="uk-button" href="#modal-center" data-uk-toggle>
+										<span
+											data-uk-icon="icon: settings"
+											class="uk-margin-small-right"
+										></span
+										>Change Password
+									</a>
+								</li>
+								<li class="uk-nav-divider"></li>
+								<li>
+									<a href="#"
+										><span data-uk-icon="icon: trash"></span> Delete Your
+										Account</a
+									>
+								</li>
+								<li class="uk-nav-divider"></li>
+								<li>
+									<a href="/logout"
+										><span data-uk-icon="icon: sign-out"></span> Sign Out</a
+									>
+								</li>
+							</ul>
+						</div>
+						<!-- /user dropdown -->
+					</div>
+				</div>
+
+				<div class="left-nav-wrap">
+					<ul class="uk-nav uk-nav-default uk-nav-parent-icon" data-uk-nav>
+						<li class="uk-nav-header">ACTIONS</li>
+
+						<li>
+							<a href="#UpcomingEvents"
+								><span
+									data-uk-icon="icon: thumbnails"
+									class="uk-margin-small-right"
+								></span
+								>Upcoming Events</a
+							>
+						</li>
+						<!-- <li>
+							<a href="#"
+								><span
+									data-uk-icon="icon: users"
+									class="uk-margin-small-right"
+								></span
+								>Upload Assignment</a
+							>
+						</li> -->
+						<!-- <li class="uk-parent">
+							<a href="#"
+								><span
+									data-uk-icon="icon: users"
+									class="uk-margin-small-right"
+								></span
+								>Students</a
+							>
+							<ul class="uk-nav-sub">
+								<li>
+									<a title="Article" href="article.html">Article</a>
+								</li>
+								<li>
+									<a title="Album" href="album.html">Album</a>
+								</li>
+								<li>
+									<a title="Cover" href="cover.html">Cover</a>
+								</li>
+								<li>
+									<a title="Cards" href="cards.html">Cards</a>
+								</li>
+								<li>
+									<a title="News Blog" href="newsBlog.html">News Blog</a>
+								</li>
+								<li>
+									<a title="Price" href="price.html">Price</a>
+								</li>
+								<li>
+									<a title="Login" href="login.html">Login</a>
+								</li>
+								<li>
+									<a title="Login-Dark" href="login-dark.html">Login - Dark</a>
+								</li>
+							</ul>
+						</li> -->
+						<li class="uk-parent">
+							<a href="#"
+								><span
+									data-uk-icon="icon: thumbnails"
+									class="uk-margin-small-right"
+								></span
+								>Edit</a
+							>
+							<ul class="uk-nav-sub">
+								<li>
+									<a title="Article" href="article.html">Article</a>
+								</li>
+								<li>
+									<a title="Album" href="album.html">Album</a>
+								</li>
+								<li>
+									<a title="Cover" href="cover.html">Cover</a>
+								</li>
+								<li>
+									<a title="Cards" href="cards.html">Cards</a>
+								</li>
+								<li>
+									<a title="News Blog" href="newsBlog.html">News Blog</a>
+								</li>
+								<li>
+									<a title="Price" href="price.html">Price</a>
+								</li>
+								<li>
+									<a title="Login" href="login.html">Login</a>
+								</li>
+								<li>
+									<a title="Login-Dark" href="login-dark.html">Login - Dark</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="/assignments"
+								><span
+									data-uk-icon="icon: album"
+									class="uk-margin-small-right"
+								></span
+								>Assignments</a
+							>
+						</li>
+						<li>
+							<a href="#"
+								><span
+									data-uk-icon="icon: lifesaver"
+									class="uk-margin-small-right"
+								></span
+								>Tips</a
+							>
+						</li>
+						<li>
+							<a href="#"
+								><span
+									data-uk-icon="icon: comments"
+									class="uk-margin-small-right"
+								></span
+								>Messages</a
+							>
+						</li>
+					</ul>
+					<div class="left-content-box uk-margin-top">
+						<h5>Daily Reports</h5>
+						<div>
+							<span class="uk-text-small">Traffic <small>(+50)</small></span>
+							<progress class="uk-progress" value="50" max="100"></progress>
+						</div>
+						<div>
+							<span class="uk-text-small">Income <small>(+78)</small></span>
+							<progress
+								class="uk-progress success"
+								value="78"
+								max="100"
+							></progress>
+						</div>
+						<div>
+							<span class="uk-text-small">Feedback <small>(-12)</small></span>
+							<progress
+								class="uk-progress warning"
+								value="12"
+								max="100"
+							></progress>
+						</div>
+					</div>
+				</div>
+				<div class="bar-bottom">
+					<ul
+						class="uk-subnav uk-flex uk-flex-center uk-child-width-1-5"
+						data-uk-grid
+					>
+						<li>
+							<a
+								href="#"
+								class="uk-icon-link"
+								data-uk-icon="icon: home"
+								title="Home"
+								data-uk-tooltip
+							></a>
+						</li>
+						<li>
+							<a
+								href="#"
+								class="uk-icon-link"
+								data-uk-icon="icon: settings"
+								title="Settings"
+								data-uk-tooltip
+							></a>
+						</li>
+						<li>
+							<a
+								href="#"
+								class="uk-icon-link"
+								data-uk-icon="icon: social"
+								title="Social"
+								data-uk-tooltip
+							></a>
+						</li>
+
+						<li>
+							<a
+								href="/logout"
+								class="uk-icon-link"
+								data-uk-tooltip="Sign out"
+								data-uk-icon="icon: sign-out"
+							></a>
+						</li>
+					</ul>
+				</div>
+				<!-- 				
 				<ul class="uk-nav uk-nav-default">
 					<li class="uk-active"><a href="#">Active</a></li>
 					<li class="uk-parent">
@@ -1068,7 +1432,7 @@
 					eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
 					minim veniam, quis nostrud exercitation ullamco laboris nisi ut
 					aliquip ex ea commodo consequat.
-				</p>
+				</p> -->
 			</div>
 		</div>
 		<!-- /OFFCANVAS -->

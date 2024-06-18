@@ -4,7 +4,7 @@ const assignmentSchema = new mongoose.Schema(
 	{
 		title: { type: String, required: true },
 		description: { type: String },
-		filePath: { type: String, required: true },
+		filePath: { type: String, required: true, unique: true },
 		createdBy: {
 			type: String,
 

@@ -6,7 +6,7 @@ const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
 
-function deleteFile(filePath) {
+async function deleteFile(filePath) {
 	return new Promise((resolve) => {
 		fs.unlink(filePath, (err) => {
 			if (err) {
@@ -98,4 +98,30 @@ function combineDateTime(deadlineDate, deadlineTime) {
 	return combinedDateTime;
 }
 
-module.exports = { deleteFile, Numbers, countMembers, combineDateTime };
+function formatDate(dateString) {
+	// Create a new Date object from the input date string
+	const date = new Date(dateString);
+
+	// Extract day, month, and year from the date object
+	const day = date.getUTCDate();
+	const month = date.getUTCMonth() + 1; // Months are zero-based, so add 1
+	const year = date.getUTCFullYear();
+
+	// Format day and month to be two digits
+	const formattedDay = day < 10 ? "0" + day : day;
+	const formattedMonth = month < 10 ? "0" + month : month;
+
+	// Format year to be in yy format
+	const formattedYear = year.toString().slice(-2);
+
+	// Return the formatted date string in dd/mm/yy format
+	return `${formattedDay}/${formattedMonth}/${formattedYear}`;
+}
+
+module.exports = {
+	deleteFile,
+	Numbers,
+	countMembers,
+	combineDateTime,
+	formatDate,
+};

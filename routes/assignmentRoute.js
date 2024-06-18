@@ -6,6 +6,8 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 const { combineDateTime } = require("../functions/functions");
+const passportConfig = require("../passportConfig");
+passportConfig(router);
 
 // Assignments
 const storage = multer.diskStorage({
@@ -34,20 +36,6 @@ const upload = multer({
 		}
 	},
 });
-
-function deleteFile(filePath) {
-	return new Promise((resolve) => {
-		fs.unlink(filePath, (err) => {
-			if (err) {
-				console.error("Error removing file:", err);
-				resolve(false);
-			} else {
-				console.log("File removed successfully");
-				resolve(true);
-			}
-		});
-	});
-}
 
 router.get("/assignments", async (req, res) => {
 	if (req.isAuthenticated()) {
@@ -147,6 +135,20 @@ router.get("/assignments/:id", async (req, res) => {
 	}
 });
 
+async function deleteFile(filePath) {
+	return new Promise((resolve) => {
+		fs.unlink(filePath, (err) => {
+			if (err) {
+				console.error("Error removing file:", err);
+				resolve(false);
+			} else {
+				console.log("File removed successfully");
+				resolve(true);
+			}
+		});
+	});
+}
+
 // 3. Delete assignment by ID
 router.post("/assignments/delete/:id", async (req, res) => {
 	if (req.isAuthenticated()) {
@@ -162,7 +164,7 @@ router.post("/assignments/delete/:id", async (req, res) => {
 			if (!assignment) {
 				return res.status(404).json({ message: "Cannot find assignment" });
 			}
-			// res.json({ message: "Deleted assignment" });
+
 			res.redirect("/assignments");
 		} catch (err) {
 			res.status(500).json({ message: err.message });
@@ -185,7 +187,6 @@ router.get("/assignments/get/:class", async (req, res) => {
 
 // 5. Downloading assignments
 router.get("/assignments/download/:id", async (req, res) => {
-	console.log(__dirname);
 	try {
 		const assignment = await Assignment.findById(req.params.id);
 		if (!assignment) {

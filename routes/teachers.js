@@ -1,8 +1,9 @@
-const express = require("express");
-
-const router = express.Router();
+const router = require("express").Router();
 const Teacher = require("../models/teacherModel");
-
+const passportConfig = require("../passportConfig");
+const Assignment = require("../models/assignmentModel");
+passportConfig(router);
+const { deleteFile } = require("../functions/functions");
 // Route for handling teachers list
 router.get("/teachersList", (req, res) => {
 	try {
@@ -113,8 +114,8 @@ router.post("/teachers/delete/:id", async (req, res) => {
 					},
 					{ filePath: true, _id: true }
 				);
-				allAssignments.forEach((assignment, index) => {
-					deleteFile(assignment.filePath)
+				allAssignments.forEach(async (assignment, index) => {
+					await deleteFile(assignment.filePath)
 						.then(async () => {
 							await Assignment.findByIdAndDelete(assignment._id);
 							// console.log("File " + index + " Deleted");
@@ -157,6 +158,63 @@ router.post("/teachers/update/:id", async (req, res) => {
 		res.status(200).json(teacher);
 	} catch (err) {
 		res.status(500).json({ error: err.message });
+	}
+});
+
+// Route to add subjects to a teacher
+router.post("/teachers/:id/subjects", async (req, res) => {
+	const { id } = req.params;
+	const { newSubject } = req.body;
+
+	if (!newSubject) {
+		return res.status(400).send("Subject is required");
+	}
+
+	try {
+		const teacher = await Teacher.findByIdAndUpdate(
+			id,
+			{ $addToSet: { subjectsTaught: newSubject } },
+			{ new: true }
+		);
+
+		if (!teacher) {
+			return res.status(404).send("Teacher not found");
+		}
+
+		res.redirect("/dashboard");
+	} catch (error) {
+		if (error.kind === "ObjectId") {
+			return res.status(400).send("Invalid teacher ID");
+		}
+		res.status(500).send(error.message);
+	}
+});
+
+router.post("/teacher/:id/delete/subjects", async (req, res) => {
+	const { id } = req.params;
+	const { subjectToDelete } = req.body;
+
+	if (!subjectToDelete) {
+		return res.status(400).send("Subject is required");
+	}
+
+	try {
+		const teacher = await Teacher.findByIdAndUpdate(
+			id,
+			{
+				$pull: { subjectsTaught: subjectToDelete },
+			},
+			{ new: true }
+		);
+		if (!teacher) {
+			return res.status(404).send("Teacher not found");
+		}
+		res.redirect("/dashboard");
+	} catch (error) {
+		if (error.kind === "ObjectId") {
+			return res.status(400).send("Invalid teacher ID");
+		}
+		res.status(500).send(error.message);
 	}
 });
 

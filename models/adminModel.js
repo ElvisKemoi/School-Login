@@ -13,10 +13,7 @@ const adminSchema = new mongoose.Schema(
 		password: {
 			type: String,
 		},
-		joined: {
-			type: Date,
-			default: Date.now,
-		},
+
 		secret: {
 			type: String,
 		},

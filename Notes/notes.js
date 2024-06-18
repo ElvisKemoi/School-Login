@@ -1,9 +1,13 @@
+// * Make the title property in the assignments model to be unique
+// * Implement flash messages when actions are done to show success or failure of an action.
+
 // TODO 1. Teachers
 
 // 1.1. Allow teachers to grade assignments.
-// 1.2. Enable teachers to select the class and subject for assignments.
+//? 1.2.  Enable teachers to select the class and subject for assignments.
 // 1.3. Add functionality to input teacher details, including subjects taught.
 // 1.4. Implement a deadline feature for assignment submissions (date and time).
+//? 1.5. Add the assignments list to the teachers' dashboard.
 
 // TODO 2. Students
 // 2.1. Enable students to submit assignments before the deadline.
@@ -26,6 +30,8 @@
 // 4.2. Add additional fields to the "Add assignments" form (e.g., due date, class).
 // 4.3. Update the assignment schema to accommodate new requirements.
 // 4.4. Add functionality for creating classes and create a classes schema and model.
+// 4.5. Add Stream to the class model.
+// 4.6. Add Grade as a number.
 
 // TODO 5. Login
 // 5.1. Insert the members list in the class model as an array.
