@@ -118,7 +118,20 @@ function formatDate(dateString) {
 	return `${formattedDay}/${formattedMonth}/${formattedYear}`;
 }
 
+function deadlineReached(deadline) {
+	// Convert the deadline to a Date object
+	const deadlineDate = new Date(deadline);
+	// console.log(deadlineDate);
+
+	// Get the current date and time
+	const now = new Date();
+
+	// Compare the current date and time with the deadline
+	return now >= deadlineDate;
+}
+
 module.exports = {
+	deadlineReached,
 	deleteFile,
 	Numbers,
 	countMembers,

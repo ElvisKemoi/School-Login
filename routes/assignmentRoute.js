@@ -5,7 +5,11 @@ const Class = require("../models/classModel");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
-const { combineDateTime } = require("../functions/functions");
+const {
+	combineDateTime,
+	formatDate,
+	deadlineReached,
+} = require("../functions/functions");
 const passportConfig = require("../passportConfig");
 passportConfig(router);
 
@@ -40,8 +44,17 @@ const upload = multer({
 router.get("/assignments", async (req, res) => {
 	if (req.isAuthenticated()) {
 		try {
-			const allClasses = await Class.find();
-			res.render("assignmentsPanel", { classes: allClasses });
+			const [allClasses, assignments] = await Promise.all([
+				Class.find(),
+				Assignment.find(),
+			]);
+
+			res.render("assignmentsPanel", {
+				classes: allClasses,
+				assignments: assignments,
+				formatDate: formatDate,
+				deadlineReached: deadlineReached,
+			});
 		} catch (err) {
 			console.error(err);
 			res.status(500).send("Internal Server Error");
@@ -152,6 +165,10 @@ async function deleteFile(filePath) {
 // 3. Delete assignment by ID
 router.post("/assignments/delete/:id", async (req, res) => {
 	if (req.isAuthenticated()) {
+		const referer = req.headers.referer || req.get("referer");
+		const refererArray = referer.split("/");
+		const originRoute = refererArray[refererArray.length - 1];
+
 		try {
 			const deleteStatus = await deleteFile(req.body.filePath);
 
@@ -165,7 +182,7 @@ router.post("/assignments/delete/:id", async (req, res) => {
 				return res.status(404).json({ message: "Cannot find assignment" });
 			}
 
-			res.redirect("/assignments");
+			res.redirect(`/${originRoute}`);
 		} catch (err) {
 			res.status(500).json({ message: err.message });
 		}

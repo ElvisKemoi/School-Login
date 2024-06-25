@@ -112,6 +112,7 @@ async function getAssignments() {
 			const deadline = formatDate(assignment.deadline);
 
 			card.classList.add("nature-card");
+
 			card.innerHTML = `
 			<div class="uk-card uk-card-small uk-card-default">
 			  <div class="uk-card-header">
@@ -161,12 +162,12 @@ async function getAssignments() {
 					<a href="#" data-uk-tooltip="title: Pinterest" class="uk-icon-link" data-uk-icon="icon:pinterest; ratio: 0.8"></a>-->
 					<div data-uk-tooltip="title: Deadline" >
 					<span data-uk-icon="icon:clock; ratio: 0.8"></span> ${deadline} </div>
-					
+
 				  </div>
 				  <div class="uk-width-auto uk-text-right">
 				  <form id="${assignmentId}" action="/assignments/delete/${assignmentId}" method="post">
 				  <input type="hidden" name="filePath" value="${assignment.filePath}">
-				  
+
 				  <button
 					  type="button"
 					  class="uk-icon-link"
@@ -176,7 +177,7 @@ async function getAssignments() {
 					  onclick="confirmDelete('${assignmentId}')"
 				  ></button>
 			  </form>
-				 
+
 				  </div>
 				</div>
 			  </div>

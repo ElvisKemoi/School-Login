@@ -94,3 +94,19 @@ function confirmDelete() {
 		}
 	});
 }
+
+async function confirmDelete(id) {
+	await Swal.fire({
+		title: "Are you sure?",
+		text: "You won't be able to revert this!",
+		icon: "warning",
+		confirmButtonText: "Yes, delete it!",
+		showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+	}).then((result) => {
+		if (result.isConfirmed) {
+			document.getElementById(id).submit();
+		}
+	});
+}

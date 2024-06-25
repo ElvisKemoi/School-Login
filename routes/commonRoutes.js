@@ -7,7 +7,12 @@ const Assignment = require("../models/assignmentModel");
 const passport = require("passport");
 const Event = require("../models/events");
 
-const { Numbers, countMembers, formatDate } = require("../functions/functions");
+const {
+	Numbers,
+	countMembers,
+	formatDate,
+	deadlineReached,
+} = require("../functions/functions");
 
 const passportConfig = require("../passportConfig");
 passportConfig(router);
@@ -34,12 +39,14 @@ router.get("/dashboard", async (req, res) => {
 		const dashType = await req.session.passport.user.type;
 		const userId = req.session.passport.user.id;
 		let user;
+		const classes = await Class.find({}).sort({ className: 1 });
 
 		const commonData = {
 			userName: req.user.username,
 			userId: req.user._id,
 			userType: dashType,
 			formatDate: formatDate,
+			deadlineReached: deadlineReached,
 		};
 
 		const fetchAdminData = async () => {
@@ -58,7 +65,6 @@ router.get("/dashboard", async (req, res) => {
 			const classAssignments = await Assignment.find({
 				AsClass: studentClass.class,
 			});
-			const classes = await Class.find({}).sort({ className: 1 });
 			user = await Student.findById(userId);
 
 			return {
@@ -79,6 +85,7 @@ router.get("/dashboard", async (req, res) => {
 			return {
 				assignments: teacherAssignments,
 				user: user,
+				classes: classes,
 			};
 		};
 
