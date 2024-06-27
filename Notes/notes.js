@@ -26,9 +26,9 @@
 // 3.5. Allow admins to view and manage student accounts, including adding and removing students.
 
 // TODO 4. Class
-// 4.1. Enable students to see assignments based on their assigned classes.
-// 4.2. Add additional fields to the "Add assignments" form (e.g., due date, class).
-// 4.3. Update the assignment schema to accommodate new requirements.
+//? 4.1. Enable students to see assignments based on their assigned classes.
+//? 4.2. Add additional fields to the "Add assignments" form (e.g., due date, class).
+//? 4.3. Update the assignment schema to accommodate new requirements.
 // 4.4. Add functionality for creating classes and create a classes schema and model.
 // 4.5. Add Stream to the class model.
 // 4.6. Add Grade as a number.
@@ -36,6 +36,11 @@
 // TODO 5. Login
 // 5.1. Insert the members list in the class model as an array.
 // 5.2. Add flash messages for login actions.
+
+// TODO 6. Timetables
+// 6.1. Create a timetable modal and schema.
+// 6.2. Create a panel for timetables and the functionalities behind it.
+// 6.3.
 
 // Principal/Headmaster
 

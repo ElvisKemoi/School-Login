@@ -619,12 +619,30 @@
 															><%= assignment.AsClass %>
 														</span>
 													</div>
+
 													<div
 														class="uk-width-auto uk-text-right uk-text-muted"
 														title="Deadline"
 														data-uk-tooltip
 													>
+														<% if(deadlineReached(assignment.deadline)){ %>
+
+														<span
+															data-uk-tooltip="title: Status: Expired "
+															class="uk-text-success"
+														>
+															🔴
+														</span>
+														<% }else{ %>
+														<span
+															data-uk-tooltip="title: Status: Active "
+															class="uk-text-success"
+														>
+															🟢
+														</span>
+														<% } %>
 														<span data-uk-icon="icon:clock; ratio: 0.8"></span>
+
 														<%= formatDate(assignment.deadline) %>
 													</div>
 												</div>
